@@ -1,7 +1,7 @@
 import { render } from 'solid-js/web';
 import App from "./App";
 import 'maplibre-gl/dist/maplibre-gl.css';
-import './map.scss';
+import './global.scss';
 
 const root = document.getElementById('root');
 
