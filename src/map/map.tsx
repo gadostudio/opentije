@@ -8,7 +8,7 @@ export const Map: Component = () => {
     onMount(async () => {
         const map = new maplibregl.Map({
             container: 'map',
-            style: 'https://api.maptiler.com/maps/bright/style.json?key=6VuZySsdw7PsGcj8f6tz',
+            style: '/assets/style.json',
             center: [jakartaCoordinate.longitude, jakartaCoordinate.latitude],
             zoom: 12,
         });
