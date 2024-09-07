@@ -33,12 +33,13 @@ export async function getRawData() {
     const getFileRawData = async (filename: string) => {
         const entry = fileEntries[filename];
         const writer = new TextWriter();
-        const text = await entry.getData(writer);
+        const text = await entry.getData!(writer);
         return Papa.parse(text, {
             header: true,
+            dynamicTyping: true,
         });
     };
-    
+
     const [routesRawData, stopsRawData, shapesRawData, tripsRawData] = await Promise.all([
         getFileRawData('routes.txt'),
         getFileRawData('stops.txt'),
@@ -46,20 +47,20 @@ export async function getRawData() {
         getFileRawData('trips.txt'),
     ]);
 
-    if (routesRawData.error) {
-        console.error(routesRawData.error);
+    if (routesRawData.errors) {
+        console.error(routesRawData.errors);
     }
-    
-    if (stopsRawData.error) {
-        console.error(stopsRawData.error);
+
+    if (stopsRawData.errors) {
+        console.error(stopsRawData.errors);
     }
-    
-    if (shapesRawData.error) {
-        console.error(shapesRawData.error);
+
+    if (shapesRawData.errors) {
+        console.error(shapesRawData.errors);
     }
-    
-    if (tripsRawData.error) {
-        console.error(tripsRawData.error);
+
+    if (tripsRawData.errors) {
+        console.error(tripsRawData.errors);
     }
 
     await zipReader.close();
@@ -73,7 +74,7 @@ export async function getRawData() {
 }
 
 export type RouteRawData = {
-    id: string;
+    route_id: string;
     agency_id: string;
     route_short_name: string;
     route_long_name: string;
@@ -104,7 +105,7 @@ export type TripRawData = {
     service_id: string;
     trip_id: string;
     trip_headsign: string;
-    direction_id: number;
+    direction_id: string;
     shape_id: string;
     trip_short_name: string;
 };
