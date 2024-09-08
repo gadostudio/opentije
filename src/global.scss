@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -11,8 +12,9 @@ html, body {
 
   &__sidebar {
     height: 100vh;
-    width: 44px;
+    width: 360px;
     background: white;
+    border-right: #00000040 1px solid;
   }
 
   &__canvas {
@@ -24,14 +26,43 @@ html, body {
     position: relative;
     width: 100%;
   }
+}
 
-  &__search-box {
-    background: white;
-    width: 376px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 12px 16px;
-    border-radius: 16px;
+.sidebar {
+  &__routes {
+    overflow-y: scroll;
+    height: 100%;
+  }
+}
+
+.route {
+  &__list {
+    padding: 0;
+  }
+
+  &__item {
+    padding: 8px;
+    gap: 8px;
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  &__item:hover {
+    background: #ebf3f9;
+  }
+
+  &__badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: 800;
+    width: 44px;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+    height: 44px;
+    border-radius: 50%;
   }
 }
