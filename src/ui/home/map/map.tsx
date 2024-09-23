@@ -1,16 +1,17 @@
 import { Component, createSignal, onMount } from "solid-js";
 import { Feature, Position } from "geojson";
 import maplibregl from "maplibre-gl";
-import { jakartaCoordinate } from "../constants";
+import { jakartaCoordinate } from "../../../constants";
 import {
-  DefaultDict,
   getRawData,
   RouteRawData,
   ShapeRawData,
-} from "../consumer";
+} from "../../../data/consumer";
+import { DefaultMap } from "../../../utils/container";
 import style from "./map.module.scss";
 import { Route } from "../sidebar/routes";
 import { Sidebar } from "../sidebar/sidebar";
+import { Result } from "../../../utils/result";
 
 type Trip = {
   routeId: string;
@@ -24,8 +25,6 @@ export type RouteData = {
 };
 
 export const MapCanvas: Component = () => {
-  const [routes, setRoutes] = createSignal<Array<RouteData> | null>(null);
-
   onMount(async () => {
     const map = new maplibregl.Map({
       container: "map",
@@ -33,41 +32,6 @@ export const MapCanvas: Component = () => {
       center: [jakartaCoordinate.longitude, jakartaCoordinate.latitude],
       zoom: 12,
     });
-
-    const { routesRawData, stopsRawData, tripsRawData, shapesRawData } =
-      await getRawData();
-
-    const tripShapes = new DefaultDict<string, Array<ShapeRawData>>(() => []);
-    for (const shapeRawData of shapesRawData) {
-      tripShapes.get(shapeRawData.shape_id).push(shapeRawData);
-    }
-    for (const shapes of tripShapes.values()) {
-      shapes.sort((shape) => shape.shape_pt_sequence);
-    }
-
-    const trips = new DefaultDict<string, Array<Trip>>(() => []);
-    for (const tripRawData of tripsRawData) {
-      trips.get(tripRawData.route_id).push({
-        routeId: tripRawData.trip_id,
-        shapes: tripShapes.get(tripRawData.shape_id),
-      });
-    }
-
-    const routes = new Map<string, RouteData>();
-    // 1M for dev
-    for (const routeRawData of routesRawData) {
-      if (routeRawData.route_id === "") {
-        continue;
-      }
-
-      routes.set(routeRawData.route_id, {
-        data: routeRawData,
-        // stops: [],
-        trips: trips.get(routeRawData.route_id),
-      });
-    }
-
-    setRoutes([...routes.values()]);
 
     const pathsData: Array<Feature> = [];
     for (const route of routes.values()) {
@@ -152,14 +116,5 @@ export const MapCanvas: Component = () => {
     });
   });
 
-  return (
-    <div class="map__container">
-      <div class="map__sidebar">
-        <Sidebar routes={routes} />
-      </div>
-      <div class="map__canvas-container">
-        <div id="map" class="map__canvas"></div>
-      </div>
-    </div>
-  );
+  return <div id="map" class="map__canvas"></div>;
 };

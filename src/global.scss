@@ -34,35 +34,3 @@ body {
     height: 100%;
   }
 }
-
-.route {
-  &__list {
-    padding: 0;
-  }
-
-  &__item {
-    padding: 8px;
-    gap: 8px;
-    list-style-type: none;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-  }
-
-  &__item:hover {
-    background: #ebf3f9;
-  }
-
-  &__badge {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-weight: 800;
-    width: 44px;
-    font-size: 0.7rem;
-    flex-shrink: 0;
-    height: 44px;
-    border-radius: 50%;
-  }
-}

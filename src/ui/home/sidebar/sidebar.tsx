@@ -2,15 +2,10 @@ import { Accessor, For } from "solid-js";
 import { createStore } from "solid-js/store";
 import { RouteData } from "../map/map";
 import { Route } from "./routes";
-import { AboutModal } from "./about";
 import style from "./sidebar.module.scss";
-import { RouteType, RouteTypeValues } from "../consumer";
+import { RouteType, RouteTypeValues } from "../../../data/consumer";
 
-type SidebarProps = {
-  routes: Accessor<Array<RouteData> | null>;
-};
-
-export const Sidebar = ({ routes }: SidebarProps) => {
+export const Sidebar = () => {
   const [filter, setFilter] = createStore({
     query: "",
     type: {
@@ -70,7 +65,7 @@ export const Sidebar = ({ routes }: SidebarProps) => {
         </div>
       </div>
       <div class="sidebar__routes">
-        <ul class="route__list">
+        <ul class={style.routes}>
           {getFilteredRoutes()?.map((route) => <Route route={route} />)}
         </ul>
       </div>

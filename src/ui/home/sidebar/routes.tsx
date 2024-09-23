@@ -1,3 +1,4 @@
+import style from "./routes.module.scss"
 import { RouteData } from "../map/map";
 
 type RouteProps = {
@@ -6,14 +7,15 @@ type RouteProps = {
 
 export const Route = ({ route }: RouteProps) => {
   return (
-    <li class="route__item">
+    <li class={style.container}>
       <span
-        class="route__badge"
+        class={style.badge}
         style={`background: #${route.data.route_color}`}
       >
         {route.data.route_id}
       </span>
-      <p>{route.data.route_long_name}</p>
+      <p class={style.label}>{route.data.route_long_name}</p>
+      <input type="checkbox" />
     </li>
   );
 };
