@@ -5,9 +5,10 @@
     display: flex;
     align-items: center;
     flex-direction: row;
+    border-radius: 4px;
 
     &:hover {
-        background: #ebf3f9;
+        background: #ffffffbc;
     }
 }
 

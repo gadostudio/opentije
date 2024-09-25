@@ -17,11 +17,12 @@ export const Sidebar = () => {
                     placeholder="Cari rute bus atau bus stop"
                     onInput={(e) => setQuery(e.target.value)}
                     value={filter().query}
+                    class={style.searchInput}
                 />
                 <div class={style.filters}>
                     <For each={routeTypes}>
                         {(routeType) => (
-                            <div>
+                            <label>
                                 <input
                                     type="checkbox"
                                     checked={filter().selectedRouteTypes.has(
@@ -35,7 +36,7 @@ export const Sidebar = () => {
                                     }}
                                 />
                                 <p>{routeType}</p>
-                            </div>
+                            </label>
                         )}
                     </For>
                 </div>
@@ -47,7 +48,7 @@ export const Sidebar = () => {
                     ))}
                 </ul>
             </div>
-            <div>
+            <div class="sidebar__about">
                 <a href="javascript:;">Tentang OpenTije</a>
             </div>
             {/* <AboutModal /> */}
