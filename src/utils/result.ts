@@ -5,6 +5,8 @@ export type Result<T> = {
 } | {
     type: 'error',
     error: unknown,
+    data?: T,
 } | {
     type: 'loading',
+    data?: T,
 };

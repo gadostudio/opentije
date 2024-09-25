@@ -5,13 +5,11 @@ export enum RouteType {
   BRT = "BRT",
   Mikrotrans = "Mikrotrans",
   Integrasi = "Angkutan Umum Integrasi",
-}
-
-export const RouteTypeValues = [
-  RouteType.BRT,
-  RouteType.Integrasi,
-  RouteType.Mikrotrans,
-];
+  Rusun = "Rusun",
+  Royaltrans = "Royaltrans",
+  Transjabodetabek = "Transjabodetabek",
+  BusWisata = "Bus Wisata",
+};
 
 export async function getRawData() {
   const response = await fetch("/assets/file_gtfs.zip");
