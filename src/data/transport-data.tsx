@@ -1,16 +1,13 @@
 import {
     Accessor,
-    Component,
     createContext,
     createEffect,
     createSignal,
     onMount,
     ParentComponent,
-    ParentProps,
-    Setter,
     useContext,
 } from "solid-js";
-import { Point, Feature } from "geojson";
+import { Point, Feature, MultiLineString, Position } from "geojson";
 import { Result } from "../utils/result";
 import { getRawData, RouteRawData, RouteType, ShapeRawData } from "./consumer";
 import { DefaultMap } from "../utils/container";
@@ -20,6 +17,13 @@ export class BusTrip {
         public id: string,
         public shapes: Array<ShapeRawData>,
     ) {}
+
+    shapeCoordinates = (): Array<Position> => {
+        return this.shapes.map((shape) => [
+            shape.shape_pt_lon,
+            shape.shape_pt_lat,
+        ]);
+    };
 }
 
 export class BusStop {
@@ -60,6 +64,21 @@ export class BusRoute {
         this.id = rawData.route_id;
         this.type = rawData.route_desc;
     }
+
+    routeToGeoJson = (): Feature<MultiLineString> => {
+        const routeShapes = this.trips.map((trip) => trip.shapeCoordinates());
+        return {
+            type: "Feature",
+            geometry: {
+                type: "MultiLineString",
+                coordinates: routeShapes,
+            },
+            properties: {
+                name: this.fullName,
+                color: `#${this.color}`,
+            },
+        };
+    };
 }
 
 export type TripRaw = {
@@ -119,6 +138,7 @@ export type TransportData = {
 export type GeoData = {
     busStops: Array<BusStop>;
     busRoutes: Array<BusRoute>;
+    selectedRoutes: Array<BusRoute>;
 };
 
 export type Filter = {
@@ -138,6 +158,7 @@ export const TransportDataProvider: ParentComponent = (props) => {
     const [geoData, setGeoData] = createSignal<GeoData>({
         busStops: [],
         busRoutes: [],
+        selectedRoutes: [],
     });
     const [filter, setFilter] = createSignal<Filter>({
         query: "",
@@ -245,9 +266,16 @@ export const TransportDataProvider: ParentComponent = (props) => {
             busStops.push(...data.getStops());
         }
 
+        const busRoutes = data.getRoutes(query, selectedRouteTypes);
+        const selectedRoutes = [];
+        for (const routeId of selectedRouteIds) {
+            const route = data.getRoute(routeId);
+            selectedRoutes.push(route);
+        }
         setGeoData({
             busStops,
-            busRoutes: data.getRoutes(query, selectedRouteTypes),
+            selectedRoutes,
+            busRoutes,
         });
     });
 
