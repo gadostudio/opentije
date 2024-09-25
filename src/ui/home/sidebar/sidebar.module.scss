@@ -1,25 +1,25 @@
 .filters {
-  display: flex;
-  flex-direction: column;
-
-  div {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 
-    input {
-      margin: 0;
-    }
+    div {
+        display: flex;
+        flex-direction: row;
 
-    p {
-      margin: 0;
+        input {
+            margin: 0;
+        }
+
+        p {
+            margin: 0;
+        }
     }
-  }
 }
 
 .header {
-  border-bottom: #00000040 1px solid;
+    border-bottom: #00000040 1px solid;
 }
 
 .routes {
-  padding: 0;
+    padding: 0;
 }

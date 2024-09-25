@@ -4,7 +4,7 @@ import { Sidebar } from "./sidebar/sidebar";
 import { useTransportData } from "../../data/transport-data";
 
 export const HomePage: Component = () => {
-    const { tjResult } = useTransportData();
+    const { tjDataSource: tjResult } = useTransportData();
 
     return (
         <div class="map__container">

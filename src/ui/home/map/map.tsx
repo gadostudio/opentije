@@ -1,26 +1,39 @@
 import { Component, createEffect, createSignal, onMount } from "solid-js";
 import { Feature, Position } from "geojson";
-import maplibregl from "maplibre-gl";
+import { GeoJSONSource, Map } from "maplibre-gl";
 import { jakartaCoordinate } from "../../../constants";
 import { useTransportData } from "../../../data/transport-data";
 
 export const MapCanvas: Component = () => {
-    const { tj } = useTransportData();
+    const { geoData } = useTransportData();
+    const [libreMap, setLibreMap] = createSignal<Map | null>(null);
+
+    createEffect(() => {
+        const map = libreMap();
+        if (map === null) return;
+
+        const busStopsSource = map.getSource(
+            "opentije_bus_stops",
+        ) as GeoJSONSource;
+        busStopsSource.setData({
+            type: "FeatureCollection",
+            features: geoData().busStops.map((stop) => stop.asGeoJson()),
+        });
+    });
 
     onMount(() => {
-        const map = new maplibregl.Map({
+        const map = new Map({
             container: "map",
             style: "/assets/style.json",
             center: [jakartaCoordinate.longitude, jakartaCoordinate.latitude],
             zoom: 12,
         });
-
         map.on("load", () => {
             map.addSource("opentije_bus_stops", {
                 type: "geojson",
                 data: {
                     type: "FeatureCollection",
-                    features: tj().getBusStops().map(stop => stop.asGeoJson()),
+                    features: [],
                 },
             });
             map.addLayer({
@@ -31,6 +44,7 @@ export const MapCanvas: Component = () => {
                     "circle-color": ["get", "color"],
                 },
             });
+            setLibreMap(map);
         });
     });
 

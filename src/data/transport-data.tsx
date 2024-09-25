@@ -2,6 +2,7 @@ import {
     Accessor,
     Component,
     createContext,
+    createEffect,
     createSignal,
     onMount,
     ParentComponent,
@@ -9,22 +10,27 @@ import {
     Setter,
     useContext,
 } from "solid-js";
+import { Point, Feature } from "geojson";
 import { Result } from "../utils/result";
 import { getRawData, RouteRawData, RouteType, ShapeRawData } from "./consumer";
 import { DefaultMap } from "../utils/container";
 
 export class BusTrip {
-    constructor(public shapes: Array<ShapeRawData>) {}
+    constructor(
+        public id: string,
+        public shapes: Array<ShapeRawData>,
+    ) {}
 }
 
 export class BusStop {
     constructor(
+        public id: string,
         public name: string,
         public latitude: number,
         public longitude: number,
     ) {}
 
-    asGeoJson = () => {
+    asGeoJson = (): Feature<Point> => {
         return {
             type: "Feature",
             geometry: {
@@ -57,29 +63,38 @@ export class BusRoute {
 }
 
 export type TripRaw = {
-    routeId: string;
+    tripId: string;
     shapes: Array<ShapeRawData>;
 };
 
-export class TJ {
+export class TJDataSource {
     constructor(
         private routes: Record<string, BusRoute>,
         private stops: Array<BusStop>,
     ) {}
 
-    getRouteIds = (): Array<string> => {
-        return Object.keys(this.routes);
+    getRouteIds = (): Set<string> => {
+        return new Set(Object.keys(this.routes));
     };
 
-    getRoutes = (): Array<BusRoute> => {
-        return Object.values(this.routes);
+    getRoutes = (query: string, routeTypes: Set<string>): Array<BusRoute> => {
+        const routes = Object.values(this.routes);
+        return routes.filter((route) => {
+            if (!routeTypes.has(route.type)) {
+                return false;
+            }
+
+            const idMatch = route.id.toLowerCase().includes(query);
+            const nameMatch = route.fullName.toLowerCase().includes(query);
+            return idMatch || nameMatch;
+        });
     };
 
     getRoute = (routeId: string): BusRoute => {
         return this.routes[routeId];
     };
 
-    getBusStops = (routeId: string | null = null): Array<BusStop> => {
+    getStops = (routeId: string | null = null): Array<BusStop> => {
         if (routeId !== null) {
             return this.routes[routeId].stops;
         }
@@ -89,8 +104,27 @@ export class TJ {
 }
 
 export type TransportData = {
-    tjResult: Accessor<Result<TJ>>;
-    tj: Accessor<TJ>;
+    tjDataSource: Accessor<Result<TJDataSource>>;
+    geoData: Accessor<GeoData>;
+    filter: Accessor<Filter>;
+
+    setQuery: (query: string) => void;
+
+    setSelectedRouteTypes: (routeId: RouteType, selected: boolean) => void;
+    clearSelectedRouteTypes: () => void;
+
+    setSelectedRouteId: (routeId: string, selected: boolean) => void;
+};
+
+export type GeoData = {
+    busStops: Array<BusStop>;
+    busRoutes: Array<BusRoute>;
+};
+
+export type Filter = {
+    query: string;
+    selectedRouteIds: Set<string>;
+    selectedRouteTypes: Set<RouteType>;
 };
 
 export const TransportDataContext = createContext<TransportData>();
@@ -98,14 +132,28 @@ export const TransportDataContext = createContext<TransportData>();
 export const useTransportData = () => useContext(TransportDataContext)!;
 
 export const TransportDataProvider: ParentComponent = (props) => {
-    const [tjResult, setTjResult] = createSignal<Result<TJ>>({
+    const [tjData, setTjData] = createSignal<Result<TJDataSource>>({
         type: "loading",
+    });
+    const [geoData, setGeoData] = createSignal<GeoData>({
+        busStops: [],
+        busRoutes: [],
+    });
+    const [filter, setFilter] = createSignal<Filter>({
+        query: "",
+        selectedRouteIds: new Set(),
+        selectedRouteTypes: new Set(Object.values(RouteType)),
     });
 
     onMount(async () => {
         // Load route data
-        const { routesRawData, stopsRawData, tripsRawData, shapesRawData } =
-            await getRawData();
+        const {
+            routesRawData,
+            stopsRawData,
+            tripsRawData,
+            shapesRawData,
+            stopTimesRawData,
+        } = await getRawData();
 
         // Populate trips and shapes
         const rawShapes = new DefaultMap<string, Array<ShapeRawData>>(() => []);
@@ -121,19 +169,29 @@ export const TransportDataProvider: ParentComponent = (props) => {
         const tripsRaw = new DefaultMap<string, Array<TripRaw>>(() => []);
         for (const tripRawData of tripsRawData) {
             tripsRaw.get(tripRawData.route_id).push({
-                routeId: tripRawData.trip_id,
+                tripId: tripRawData.trip_id,
                 shapes: rawShapes.get(tripRawData.shape_id),
             });
         }
 
         const stops: Array<BusStop> = [];
+        const stopsMap: Record<string, BusStop> = {};
         for (const stopRawData of stopsRawData) {
             const stop = new BusStop(
+                stopRawData.stop_id,
                 stopRawData.stop_name,
                 stopRawData.stop_lat,
                 stopRawData.stop_lon,
             );
             stops.push(stop);
+            stopsMap[stop.id] = stop;
+        }
+
+        const tripStopIds = new DefaultMap<string, Set<string>>(
+            () => new Set(),
+        );
+        for (const stopTime of stopTimesRawData) {
+            tripStopIds.get(stopTime.trip_id).add(stopTime.stop_id);
         }
 
         const routes: Record<string, BusRoute> = {};
@@ -146,8 +204,14 @@ export const TransportDataProvider: ParentComponent = (props) => {
 
             const trips: Array<BusTrip> = [];
             for (const tripRaw of tripsRaw.get(routeRawData.route_id)) {
-                const trip = new BusTrip(tripRaw.shapes);
+                const trip = new BusTrip(tripRaw.tripId, tripRaw.shapes);
                 trips.push(trip);
+
+                const stopIds = tripStopIds.get(trip.id);
+                for (const stopId of stopIds) {
+                    const stop = stopsMap[stopId];
+                    routeStops.push(stop);
+                }
             }
 
             routes[routeRawData.route_id] = new BusRoute(
@@ -157,15 +221,76 @@ export const TransportDataProvider: ParentComponent = (props) => {
             );
         }
 
-        setTjResult({
+        setTjData({
             type: "success",
-            data: new TJ(routes, stops),
+            data: new TJDataSource(routes, stops),
+        });
+    });
+
+    createEffect(() => {
+        const data = tjData().data;
+        if (data === undefined) {
+            return;
+        }
+
+        const { query, selectedRouteTypes, selectedRouteIds } = filter();
+
+        const busStops: Array<BusStop> = [];
+        if (selectedRouteIds.size > 0) {
+            for (const routeId of selectedRouteIds) {
+                const route = data.getRoute(routeId);
+                busStops.push(...route.stops);
+            }
+        } else {
+            busStops.push(...data.getStops());
+        }
+
+        setGeoData({
+            busStops,
+            busRoutes: data.getRoutes(query, selectedRouteTypes),
         });
     });
 
     const controller: TransportData = {
-        tjResult,
-        tj: () => tjResult().data!,
+        tjDataSource: tjData,
+        geoData,
+        filter,
+        setQuery: (query: string) =>
+            setFilter((prev) => ({
+                ...prev,
+                query,
+            })),
+        setSelectedRouteId: (routeId: string, selected: boolean) =>
+            setFilter((prev) => {
+                const selectedRouteIds = new Set(prev.selectedRouteIds);
+                if (selected) {
+                    selectedRouteIds.add(routeId);
+                } else {
+                    selectedRouteIds.delete(routeId);
+                }
+                return {
+                    ...prev,
+                    selectedRouteIds,
+                };
+            }),
+        setSelectedRouteTypes: (routeType: RouteType, selected: boolean) =>
+            setFilter((prev) => {
+                const selectedRouteTypes = new Set(prev.selectedRouteTypes);
+                if (selected) {
+                    selectedRouteTypes.add(routeType);
+                } else {
+                    selectedRouteTypes.delete(routeType);
+                }
+                return {
+                    ...prev,
+                    selectedRouteTypes,
+                };
+            }),
+        clearSelectedRouteTypes: () =>
+            setFilter((prev) => ({
+                ...prev,
+                selectedRouteTypes: new Set(),
+            })),
     };
     return (
         <TransportDataContext.Provider value={controller}>
