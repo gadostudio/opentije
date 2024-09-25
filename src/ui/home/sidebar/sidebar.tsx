@@ -51,7 +51,7 @@ export const Sidebar = () => {
                 </ul>
             </div>
             <div class="sidebar__about">
-                <button onClick={() => setShowAboutModal(true)}>Tentang OpenTije</button>
+                <button class="about-button" onClick={() => setShowAboutModal(true)}>Tentang OpenTije</button>
             </div>
             <AboutModal show={showAboutModal()} onHide={() => setShowAboutModal(false)} />
         </>
