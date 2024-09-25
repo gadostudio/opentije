@@ -3,6 +3,10 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
 }
 
 .map {
@@ -15,6 +19,20 @@ body {
         width: 360px;
         background: white;
         border-right: #00000040 1px solid;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 10;
+        background-color: rgb(247 250 255 / 46%);
+
+        @supports (backdrop-filter: blur(60px)) {
+            & {
+                backdrop-filter: blur(60px);
+                background-color: rgb(247 250 255 / 40%);
+            }
+        }
     }
 
     &__canvas {
@@ -32,5 +50,16 @@ body {
     &__routes {
         overflow-y: scroll;
         height: 100%;
+    }
+
+    &__about {
+        border-top: #00000040 1px solid;
+        padding: 16px 8px;
+        display: flex;
+        flex-direction: column;
+
+        a {
+            color: black;
+        }
     }
 }
