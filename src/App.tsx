@@ -1,8 +1,13 @@
-import { Component } from "solid-js";
-import { MapCanvas } from "./map/map";
+import { Component, createContext } from "solid-js";
+import { HomePage } from "./ui/home/HomePage";
+import { TransportDataProvider } from "./data/transport-data";
 
 const App: Component = () => {
-  return <MapCanvas />;
+    return (
+        <TransportDataProvider>
+            <HomePage />
+        </TransportDataProvider>
+    );
 };
 
 export default App;
