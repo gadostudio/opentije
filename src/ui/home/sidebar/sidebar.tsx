@@ -1,14 +1,16 @@
-import { Accessor, For } from "solid-js";
+import { Accessor, For, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { Route } from "./routes";
 import style from "./sidebar.module.scss";
 import { RouteType } from "../../../data/consumer";
 import { useTransportData } from "../../../data/transport-data";
+import { AboutModal } from "./about";
 
 export const Sidebar = () => {
     const { tjDataSource, geoData, filter, setSelectedRouteTypes, setQuery } =
         useTransportData();
     const routeTypes = Object.values(RouteType) as Array<RouteType>;
+    const [showAboutModal, setShowAboutModal] = createSignal<boolean>(false);
 
     return (
         <>
@@ -48,9 +50,9 @@ export const Sidebar = () => {
                 </ul>
             </div>
             <div>
-                <a href="javascript:;">Tentang OpenTije</a>
+                <button onClick={() => setShowAboutModal(true)}>Tentang OpenTije</button>
             </div>
-            {/* <AboutModal /> */}
+            <AboutModal show={showAboutModal()} onHide={() => setShowAboutModal(false)} />
         </>
     );
 };
