@@ -1,5 +1,5 @@
 import { Component, createEffect, createSignal, onMount } from "solid-js";
-import { GeoJSONSource, Map } from "maplibre-gl";
+import { GeoJSONSource, GeolocateControl, Map, NavigationControl } from "maplibre-gl";
 import { jakartaCoordinate } from "../../../constants";
 import { useTransportData } from "../../../data/transport-data";
 
@@ -38,6 +38,17 @@ export const MapCanvas: Component = () => {
             zoom: 12,
         });
         map.on("load", () => {
+            map.addControl(
+                new GeolocateControl({
+                    positionOptions: {
+                        enableHighAccuracy: true
+                    },
+                    trackUserLocation: true,
+                    showAccuracyCircle: false,
+                })
+            );
+            map.addControl(new NavigationControl());
+
             map.addSource("opentije_bus_stops", {
                 type: "geojson",
                 data: {
@@ -70,6 +81,7 @@ export const MapCanvas: Component = () => {
                     "line-color": ["get", "color"],
                 },
             });
+
             setLibreMap(map);
         });
     });
