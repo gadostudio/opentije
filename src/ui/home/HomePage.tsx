@@ -8,16 +8,7 @@ export const HomePage: Component = () => {
 
     return (
         <div class="map__container">
-            <div class="map__sidebar">
-                <Switch fallback={<p>Loading...</p>}>
-                    <Match when={tjResult().type === "success"}>
-                        <Sidebar />
-                    </Match>
-                    <Match when={tjResult().type === "error"}>
-                        <p>Error</p>
-                    </Match>
-                </Switch>
-            </div>
+            <Sidebar />
             <div class="map__canvas-container">
                 <Switch fallback={<p>Loading...</p>}>
                     <Match when={tjResult().type === "success"}>

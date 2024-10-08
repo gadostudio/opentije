@@ -1,4 +1,4 @@
-import { Accessor, For, createSignal } from "solid-js";
+import { Accessor, For, Match, Switch, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { Route } from "./routes";
 import style from "./sidebar.module.scss";
@@ -7,6 +7,21 @@ import { useTransportData } from "../../../data/transport-data";
 import { AboutModal } from "./about";
 
 export const Sidebar = () => {
+    const { tjDataSource } = useTransportData();
+
+    return <div class={style.container}>
+        <Switch fallback={<p>Loading...</p>}>
+            <Match when={tjDataSource().type === "success"}>
+                <Content />
+            </Match>
+            <Match when={tjDataSource().type === "error"}>
+                <p>Error</p>
+            </Match>
+        </Switch>
+    </div>;
+};
+
+const Content = () => {
     const { tjDataSource, geoData, filter, setSelectedRouteTypes, setQuery } =
         useTransportData();
     const routeTypes = Object.values(RouteType) as Array<RouteType>;
