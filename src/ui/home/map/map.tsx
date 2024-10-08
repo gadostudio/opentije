@@ -55,6 +55,35 @@ export const MapCanvas: Component = () => {
             );
             map.addControl(new NavigationControl());
 
+            map.addSource("opentije_bus_stops", {
+                type: "geojson",
+                data: {
+                    type: "FeatureCollection",
+                    features: [],
+                },
+            });
+            map.addLayer({
+                id: "opentije_bus_stops-label",
+                type: "symbol",
+                source: "opentije_bus_stops",
+                minzoom: 13,
+                layout: {
+                    "text-field": ["get", "name"],
+                    "text-font": ["Noto Sans Regular"],
+                    "text-variable-anchor": ["left", "right"],
+                    "text-radial-offset": 0.5,
+                    "text-justify": "auto",
+                },
+            });
+            map.addLayer({
+                id: "opentije_bus_stops",
+                type: "circle",
+                source: "opentije_bus_stops",
+                paint: {
+                    "circle-color": ["get", "color"],
+                },
+            });
+
             map.addSource("opentije_bus_lanes", {
                 type: "geojson",
                 data: {
@@ -72,37 +101,9 @@ export const MapCanvas: Component = () => {
                 },
             });
 
-            map.addSource("opentije_bus_stops", {
-                type: "geojson",
-                data: {
-                    type: "FeatureCollection",
-                    features: [],
-                },
-            });
-            map.addLayer({
-                id: "opentije_bus_stops",
-                type: "circle",
-                source: "opentije_bus_stops",
-                paint: {
-                    "circle-color": ["get", "color"],
-                },
-            });
             map.on("click", "opentije_bus_stops", (target) => {
                 const busStopId = target.features![0].properties.id;
                 setSelectedBusStop(busStopId);
-            });
-            map.addLayer({
-                id: "opentije_bus_stops-label",
-                type: "symbol",
-                source: "opentije_bus_stops",
-                minzoom: 13,
-                layout: {
-                    "text-field": ["get", "name"],
-                    "text-font": ["Noto Sans Regular"],
-                    "text-variable-anchor": ["left", "right"],
-                    "text-radial-offset": 0.5,
-                    "text-justify": "auto",
-                },
             });
 
             setLibreMap(map);
