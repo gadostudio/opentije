@@ -1,0 +1,21 @@
+.container {
+    width: 320px;
+    position: fixed;
+    right: 16px;
+    background: white;
+    border-radius: 16px 16px 0 0;
+
+    transition: all 0.5s ease-in-out;
+    bottom: -100%;
+
+    @supports (backdrop-filter: blur(60px)) {
+        & {
+            backdrop-filter: blur(60px);
+            background-color: rgb(247 250 255 / 40%);
+        }
+    }
+
+    &.opened {
+        bottom: 0;
+    }
+}
