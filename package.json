@@ -4,7 +4,8 @@
         "start": "vite",
         "dev": "vite",
         "build": "vite build",
-        "serve": "vite preview"
+        "serve": "vite preview",
+        "format": "prettier --write ."
     },
     "devDependencies": {
         "@types/geojson": "^7946.0.14",

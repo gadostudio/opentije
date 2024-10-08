@@ -1,7 +1,8 @@
 import { Component, Match, onMount, Switch } from "solid-js";
 import { MapCanvas } from "./map/map";
 import { Sidebar } from "./sidebar/sidebar";
-import { useTransportData } from "../../data/transport-data";
+import { BusStop, useTransportData } from "../../data/transport-data";
+import { RightPopover } from "./RightPopover";
 
 export const HomePage: Component = () => {
     const { tjDataSource: tjResult } = useTransportData();
@@ -18,6 +19,7 @@ export const HomePage: Component = () => {
                         <p>Error</p>
                     </Match>
                 </Switch>
+                <RightPopover />
             </div>
         </div>
     );

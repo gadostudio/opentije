@@ -1,10 +1,15 @@
 import { Component, createEffect, createSignal, onMount } from "solid-js";
-import { GeoJSONSource, GeolocateControl, Map, NavigationControl } from "maplibre-gl";
+import {
+    GeoJSONSource,
+    GeolocateControl,
+    Map,
+    NavigationControl,
+} from "maplibre-gl";
 import { jakartaCoordinate } from "../../../constants";
 import { useTransportData } from "../../../data/transport-data";
 
 export const MapCanvas: Component = () => {
-    const { geoData } = useTransportData();
+    const { geoData, tjDataSource, setSelectedBusStop } = useTransportData();
     const [libreMap, setLibreMap] = createSignal<Map | null>(null);
 
     createEffect(() => {
@@ -16,7 +21,7 @@ export const MapCanvas: Component = () => {
         ) as GeoJSONSource;
         busStopsSource.setData({
             type: "FeatureCollection",
-            features: geoData().busStops.map((stop) => stop.asGeoJson()),
+            features: geoData().busStops.map((stop) => stop.geoJson),
         });
 
         const busLanesSource = map.getSource(
@@ -36,16 +41,17 @@ export const MapCanvas: Component = () => {
             style: "/assets/style.json",
             center: [jakartaCoordinate.longitude, jakartaCoordinate.latitude],
             zoom: 12,
+            attributionControl: false,
         });
         map.on("load", () => {
             map.addControl(
                 new GeolocateControl({
                     positionOptions: {
-                        enableHighAccuracy: true
+                        enableHighAccuracy: true,
                     },
                     trackUserLocation: true,
                     showAccuracyCircle: false,
-                })
+                }),
             );
             map.addControl(new NavigationControl());
 
@@ -54,6 +60,19 @@ export const MapCanvas: Component = () => {
                 data: {
                     type: "FeatureCollection",
                     features: [],
+                },
+            });
+            map.addLayer({
+                id: "opentije_bus_stops-label",
+                type: "symbol",
+                source: "opentije_bus_stops",
+                minzoom: 13,
+                layout: {
+                    "text-field": ["get", "name"],
+                    "text-font": ["Noto Sans Regular"],
+                    "text-variable-anchor": ["left", "right"],
+                    "text-radial-offset": 0.5,
+                    "text-justify": "auto",
                 },
             });
             map.addLayer({
@@ -80,6 +99,11 @@ export const MapCanvas: Component = () => {
                     "line-width": 3,
                     "line-color": ["get", "color"],
                 },
+            });
+
+            map.on("click", "opentije_bus_stops", (target) => {
+                const busStopId = target.features![0].properties.id;
+                setSelectedBusStop(busStopId);
             });
 
             setLibreMap(map);

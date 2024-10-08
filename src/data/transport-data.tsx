@@ -18,23 +18,28 @@ export class BusTrip {
         public shapes: Array<ShapeRawData>,
     ) {}
 
-    shapeCoordinates = (): Array<Position> => {
+    get shapeCoordinates(): Array<Position> {
         return this.shapes.map((shape) => [
             shape.shape_pt_lon,
             shape.shape_pt_lat,
         ]);
-    };
+    }
 }
 
 export class BusStop {
+    public servedRouteIds: Array<string>;
+
     constructor(
         public id: string,
         public name: string,
         public latitude: number,
         public longitude: number,
-    ) {}
+        _servedRouteIds: Set<string>,
+    ) {
+        this.servedRouteIds = Array.from(_servedRouteIds);
+    }
 
-    asGeoJson = (): Feature<Point> => {
+    get geoJson(): Feature<Point> {
         return {
             type: "Feature",
             geometry: {
@@ -43,9 +48,11 @@ export class BusStop {
             },
             properties: {
                 color: "#FF0000",
+                id: this.id,
+                name: this.name,
             },
         };
-    };
+    }
 }
 
 export class BusRoute {
@@ -66,7 +73,7 @@ export class BusRoute {
     }
 
     routeToGeoJson = (): Feature<MultiLineString> => {
-        const routeShapes = this.trips.map((trip) => trip.shapeCoordinates());
+        const routeShapes = this.trips.map((trip) => trip.shapeCoordinates);
         return {
             type: "Feature",
             geometry: {
@@ -89,7 +96,7 @@ export type TripRaw = {
 export class TJDataSource {
     constructor(
         private routes: Record<string, BusRoute>,
-        private stops: Array<BusStop>,
+        private stops: Record<string, BusStop>,
     ) {}
 
     getRouteIds = (): Set<string> => {
@@ -109,8 +116,12 @@ export class TJDataSource {
         });
     };
 
-    getRoute = (routeId: string): BusRoute => {
-        return this.routes[routeId];
+    getRoute = (id: string): BusRoute => {
+        return this.routes[id];
+    };
+
+    getStop = (id: string): BusStop => {
+        return this.stops[id];
     };
 
     getStops = (routeId: string | null = null): Array<BusStop> => {
@@ -118,7 +129,7 @@ export class TJDataSource {
             return this.routes[routeId].stops;
         }
 
-        return this.stops;
+        return Object.values(this.stops);
     };
 }
 
@@ -126,6 +137,10 @@ export type TransportData = {
     tjDataSource: Accessor<Result<TJDataSource>>;
     geoData: Accessor<GeoData>;
     filter: Accessor<Filter>;
+
+    rightPopover: Accessor<PopOverState | null>;
+    closeRightPopover: () => void;
+    setSelectedBusStop: (id: string) => void;
 
     setQuery: (query: string) => void;
 
@@ -147,6 +162,12 @@ export type Filter = {
     selectedRouteTypes: Set<RouteType>;
 };
 
+export type PopOverBusStop = {
+    type: "bus_stop";
+    busStop: BusStop;
+};
+export type PopOverState = PopOverBusStop | null;
+
 export const TransportDataContext = createContext<TransportData>();
 
 export const useTransportData = () => useContext(TransportDataContext)!;
@@ -154,6 +175,9 @@ export const useTransportData = () => useContext(TransportDataContext)!;
 export const TransportDataProvider: ParentComponent = (props) => {
     const [tjData, setTjData] = createSignal<Result<TJDataSource>>({
         type: "loading",
+    });
+    const [rightPopover, setRightPopover] = createSignal<PopOverState>(null, {
+        equals: false,
     });
     const [geoData, setGeoData] = createSignal<GeoData>({
         busStops: [],
@@ -188,14 +212,28 @@ export const TransportDataProvider: ParentComponent = (props) => {
 
         // Map trips to routes
         const tripsRaw = new DefaultMap<string, Array<TripRaw>>(() => []);
+        const tripIdToRouteId: Record<string, string> = {};
         for (const tripRawData of tripsRawData) {
             tripsRaw.get(tripRawData.route_id).push({
                 tripId: tripRawData.trip_id,
                 shapes: rawShapes.get(tripRawData.shape_id),
             });
+            tripIdToRouteId[tripRawData.trip_id] = tripRawData.route_id;
         }
 
-        const stops: Array<BusStop> = [];
+        const tripStopIds = new DefaultMap<string, Set<string>>(
+            () => new Set(),
+        );
+        const routesServedByStop = new DefaultMap<string, Set<string>>(
+            () => new Set(),
+        );
+        for (const stopTime of stopTimesRawData) {
+            tripStopIds.get(stopTime.trip_id).add(stopTime.stop_id);
+            routesServedByStop
+                .get(stopTime.stop_id)
+                .add(tripIdToRouteId[stopTime.trip_id]);
+        }
+
         const stopsMap: Record<string, BusStop> = {};
         for (const stopRawData of stopsRawData) {
             const stop = new BusStop(
@@ -203,16 +241,9 @@ export const TransportDataProvider: ParentComponent = (props) => {
                 stopRawData.stop_name,
                 stopRawData.stop_lat,
                 stopRawData.stop_lon,
+                routesServedByStop.get(stopRawData.stop_id),
             );
-            stops.push(stop);
             stopsMap[stop.id] = stop;
-        }
-
-        const tripStopIds = new DefaultMap<string, Set<string>>(
-            () => new Set(),
-        );
-        for (const stopTime of stopTimesRawData) {
-            tripStopIds.get(stopTime.trip_id).add(stopTime.stop_id);
         }
 
         const routes: Record<string, BusRoute> = {};
@@ -244,15 +275,13 @@ export const TransportDataProvider: ParentComponent = (props) => {
 
         setTjData({
             type: "success",
-            data: new TJDataSource(routes, stops),
+            data: new TJDataSource(routes, stopsMap),
         });
     });
 
     createEffect(() => {
         const data = tjData().data;
-        if (data === undefined) {
-            return;
-        }
+        if (data === undefined) return;
 
         const { query, selectedRouteTypes, selectedRouteIds } = filter();
 
@@ -283,6 +312,19 @@ export const TransportDataProvider: ParentComponent = (props) => {
         tjDataSource: tjData,
         geoData,
         filter,
+        rightPopover,
+        setSelectedBusStop: (id: string) => {
+            const data = tjData().data;
+            if (data === undefined) return;
+
+            setRightPopover(() => ({
+                type: "bus_stop",
+                busStop: data.getStop(id),
+            }));
+        },
+        closeRightPopover: () => {
+            setRightPopover(() => null);
+        },
         setQuery: (query: string) =>
             setFilter((prev) => ({
                 ...prev,

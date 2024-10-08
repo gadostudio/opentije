@@ -9,16 +9,18 @@ import { AboutModal } from "./about";
 export const Sidebar = () => {
     const { tjDataSource } = useTransportData();
 
-    return <div class={style.container}>
-        <Switch fallback={<p>Loading...</p>}>
-            <Match when={tjDataSource().type === "success"}>
-                <Content />
-            </Match>
-            <Match when={tjDataSource().type === "error"}>
-                <p>Error</p>
-            </Match>
-        </Switch>
-    </div>;
+    return (
+        <div class={style.container}>
+            <Switch fallback={<p>Loading...</p>}>
+                <Match when={tjDataSource().type === "success"}>
+                    <Content />
+                </Match>
+                <Match when={tjDataSource().type === "error"}>
+                    <p>Error</p>
+                </Match>
+            </Switch>
+        </div>
+    );
 };
 
 const Content = () => {
@@ -66,9 +68,17 @@ const Content = () => {
                 </ul>
             </div>
             <div class="sidebar__about">
-                <button class="about-button" onClick={() => setShowAboutModal(true)}>Tentang OpenTije</button>
+                <button
+                    class="about-button"
+                    onClick={() => setShowAboutModal(true)}
+                >
+                    Tentang OpenTije
+                </button>
             </div>
-            <AboutModal show={showAboutModal()} onHide={() => setShowAboutModal(false)} />
+            <AboutModal
+                show={showAboutModal()}
+                onHide={() => setShowAboutModal(false)}
+            />
         </>
     );
 };
