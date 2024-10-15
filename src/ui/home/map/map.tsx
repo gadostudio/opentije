@@ -7,9 +7,11 @@ import {
 } from "maplibre-gl";
 import { jakartaCoordinate } from "../../../constants";
 import { useTransportData } from "../../../data/transport-data";
+import { useSidebarState } from "../../../data/sidebar-state";
 
 export const MapCanvas: Component = () => {
     const { geoData, tjDataSource, setSelectedBusStop } = useTransportData();
+    const { setIsExpanded } = useSidebarState();
     const [libreMap, setLibreMap] = createSignal<Map | null>(null);
 
     createEffect(() => {
@@ -110,5 +112,11 @@ export const MapCanvas: Component = () => {
         });
     });
 
-    return <div id="map" class="map__canvas"></div>;
+    return <div
+        id="map"
+        class="map__canvas"
+        onClick={() => setIsExpanded(false)}
+    >
+
+        </div>;
 };

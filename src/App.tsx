@@ -1,11 +1,14 @@
-import { Component, createContext } from "solid-js";
+import { Component } from "solid-js";
 import { HomePage } from "./ui/home/HomePage";
 import { TransportDataProvider } from "./data/transport-data";
+import { SidebarStateProvider } from "./data/sidebar-state";
 
 const App: Component = () => {
     return (
         <TransportDataProvider>
-            <HomePage />
+            <SidebarStateProvider>
+                <HomePage />
+            </SidebarStateProvider>
         </TransportDataProvider>
     );
 };

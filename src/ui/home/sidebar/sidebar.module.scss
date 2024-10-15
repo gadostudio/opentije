@@ -18,8 +18,11 @@
     width: 100%;
     height: auto;
 
-    top: 30px;
+    top: 256px;
     bottom: 0;
+    transform: translateY(calc(100vh - 256px - 58px));
+    will-change: transform;
+    transition: transform 0.25s ease-in-out;
 
     border-radius: 16px 16px 0 0;
 
@@ -29,6 +32,7 @@
         right: 16px;
         left: auto;
     }
+
     @media (min-width: 800px) and (min-height: 600px) and (orientation: landscape) {
         width: 360px;
         height: 100vh;
@@ -37,7 +41,12 @@
         top: 0;
 
         border-radius: 0;
+        transform: translate(0);
     }
+}
+
+.container-focused {
+    transform: translateY(0);
 }
 
 .filters {
@@ -110,10 +119,10 @@
 }
 
 .searchInput {
-    padding: 8px 12px;
+    padding: 12px;
     width: 100%;
     box-sizing: border-box;
-    border-radius: 4px;
+    border-radius: 8px;
     border: #00000040 1px solid;
     background: #ffffff40;
 

@@ -5,15 +5,17 @@ import style from "./sidebar.module.scss";
 import { RouteType } from "../../../data/consumer";
 import { useTransportData } from "../../../data/transport-data";
 import { AboutModal } from "./about";
+import { useSidebarState } from "../../../data/sidebar-state";
 
 export const Sidebar = () => {
     const { tjDataSource } = useTransportData();
+    const {isExpanded, setIsExpanded} = useSidebarState();
 
     return (
-        <div class={style.container}>
+        <div class={`${style.container} ${isExpanded() ? style["container-focused"] : ""}`}>
             <Switch fallback={<p>Loading...</p>}>
                 <Match when={tjDataSource().type === "success"}>
-                    <Content />
+                    <Content onSearchBarFocused={() => setIsExpanded(true)} />
                 </Match>
                 <Match when={tjDataSource().type === "error"}>
                     <p>Error</p>
@@ -23,7 +25,7 @@ export const Sidebar = () => {
     );
 };
 
-const Content = () => {
+const Content = ({ onSearchBarFocused }: { onSearchBarFocused: () => void }) => {
     const { tjDataSource, geoData, filter, setSelectedRouteTypes, setQuery } =
         useTransportData();
     const routeTypes = Object.values(RouteType) as Array<RouteType>;
@@ -35,6 +37,7 @@ const Content = () => {
                 <input
                     placeholder="Cari rute bus atau bus stop"
                     onInput={(e) => setQuery(e.target.value)}
+                    onFocus={() => onSearchBarFocused()}
                     value={filter().query}
                     class={style.searchInput}
                 />
