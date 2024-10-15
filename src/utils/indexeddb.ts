@@ -87,26 +87,46 @@ export async function getGTFSCacheFromIDB(db: IDBDatabase) {
                 "shapes",
                 "trips",
                 "meta"
-            ]);
+            ], "readwrite");
 
             const routesStore = tx.objectStore("routes");
             for (const routeRawData of routeRawDatum) {
-                routesStore.put(routeRawData);
+                try {
+                    routesStore.put(routeRawData);
+                } catch (e) {
+                    // skip on invalid data
+                    continue;
+                }
             }
 
             const stopsStore = tx.objectStore("stops");
             for (const stopRawData of stopRawDatum) {
-                stopsStore.put(stopRawData);
+                try {
+                    stopsStore.put(stopRawData);
+                } catch (e) {
+                    // skip on invalid data
+                    continue;
+                }
             }
 
             const shapesStore = tx.objectStore("shapes");
             for (const shapeRawData of shapeRawDatum) {
-                shapesStore.put(shapeRawData);
+                try {
+                    shapesStore.put(shapeRawData);
+                } catch (e) {
+                    // skip on invalid data
+                    continue;
+                }
             }
 
             const tripsStore = tx.objectStore("trips");
             for (const tripRawData of tripRawDatum) {
-                tripsStore.put(tripRawData);
+                try {
+                    tripsStore.put(tripRawData);
+                } catch (e) {
+                    // skip on invalid data
+                    continue;
+                }
             }
 
             const metaStore = tx.objectStore("meta");
