@@ -77,7 +77,7 @@ export async function getGTFSCacheFromIDB(db: IDBDatabase) {
     const checkIfStale = async (): Promise<boolean> => {
         const meta = await getAll<{ key: string, value: string | number }>(db, "meta");
         const expireAt = meta.find((item) => item.key === "expireAt")?.value;
-        if (expireAt === undefined) return false;
+        if (expireAt === undefined) return true;
         return (expireAt as number) > new Date().getTime();
     }
 
