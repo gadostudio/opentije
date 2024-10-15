@@ -105,6 +105,7 @@ export class TJDataSource {
 
     getRoutes = (query: string, routeTypes: Set<string>): Array<BusRoute> => {
         const routes = Object.values(this.routes);
+        if (routeTypes.size === 0) return routes;
         return routes.filter((route) => {
             if (!routeTypes.has(route.type)) {
                 return false;
@@ -187,7 +188,7 @@ export const TransportDataProvider: ParentComponent = (props) => {
     const [filter, setFilter] = createSignal<Filter>({
         query: "",
         selectedRouteIds: new Set(),
-        selectedRouteTypes: new Set(Object.values(RouteType)),
+        selectedRouteTypes: new Set(),
     });
 
     onMount(async () => {
