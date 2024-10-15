@@ -1,5 +1,6 @@
 import { BlobReader, Entry, TextWriter, ZipReader } from "@zip.js/zip.js";
 import Papa from "papaparse";
+import { openIDB, getGTFSCacheFromIDB } from "../utils/indexeddb";
 
 export enum RouteType {
     BRT = "BRT",
@@ -12,6 +13,23 @@ export enum RouteType {
 }
 
 export async function getRawData() {
+    try {
+        const idb = await openIDB();
+        const cache = await getGTFSCacheFromIDB(idb);
+        const isCacheStale = await cache.checkIfStale();
+        if (!isCacheStale) {
+            return {
+                routesRawData: await cache.getRoutes(),
+                stopsRawData: await cache.getStops(),
+                tripsRawData: await cache.getTrips(),
+                shapesRawData: await cache.getShapes(),
+                stopTimesRawData: [] // TODO
+            }
+        }
+    } catch (e) {
+        // do nothing, keep parsing
+    }
+
     const response = await fetch("/assets/file_gtfs.zip");
     const blob = await response.blob();
     const reader = new BlobReader(blob);
@@ -88,6 +106,19 @@ export async function getRawData() {
         stopTimesRawDataResult.data as Array<StopTimeRawData>;
 
     await zipReader.close();
+
+    try {
+        const idb = await openIDB();
+        const cache = await getGTFSCacheFromIDB(idb);
+        await cache.hydrateFromParsedGTFS(
+            routesRawData,
+            stopsRawData,
+            shapesRawData,
+            tripsRawData
+        );
+    } catch (e) {
+        // do nothing
+    }
 
     return {
         routesRawData,

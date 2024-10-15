@@ -74,6 +74,13 @@ export async function getGTFSCacheFromIDB(db: IDBDatabase) {
         tx.commit();
     }
 
+    const checkIfStale = async (): Promise<boolean> => {
+        const meta = await getAll<{ key: string, value: string | number }>(db, "meta");
+        const expireAt = meta.find((item) => item.key === "expireAt")?.value;
+        if (expireAt === undefined) return false;
+        return (expireAt as number) > new Date().getTime();
+    }
+
     const hydrateFromParsedGTFS = async (
         routeRawDatum: RouteRawData[],
         stopRawDatum: StopRawData[],
@@ -144,6 +151,7 @@ export async function getGTFSCacheFromIDB(db: IDBDatabase) {
         getStops,
         getShapes,
         getTrips,
+        checkIfStale,
         hydrateFromParsedGTFS
     }
 }
