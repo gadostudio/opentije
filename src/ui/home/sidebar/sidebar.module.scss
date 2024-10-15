@@ -55,15 +55,14 @@
             display: none;
 
             &:checked + p {
-                background: white;
-                opacity: 100;
+                background: #72BF78;
+                color: white;
             }
         }
 
         p {
             margin: 0;
             background: #eaeaea;
-            opacity: 40%;
             width: 100%;
             height: 100%;
             border-radius: 4px;
