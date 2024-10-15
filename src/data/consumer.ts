@@ -110,7 +110,7 @@ export async function getRawData() {
     try {
         const idb = await openIDB();
         const cache = await getGTFSCacheFromIDB(idb);
-        await cache.hydrateFromParsedGTFS(
+        cache.hydrateFromParsedGTFS(
             routesRawData,
             stopsRawData,
             shapesRawData,
