@@ -3,16 +3,18 @@ import { createStore } from "solid-js/store";
 import { Route } from "./routes";
 import style from "./sidebar.module.scss";
 import { RouteType } from "../../../data/consumer";
-import { useTransportData } from "../../../data/transport-data";
+import { BusStop, useTransportData } from "../../../data/transport-data";
 import { AboutModal } from "./about";
 import { useSidebarState } from "../../../data/sidebar-state";
 
 export const Sidebar = () => {
     const { tjDataSource } = useTransportData();
-    const {isExpanded, setIsExpanded} = useSidebarState();
+    const { isExpanded, setIsExpanded } = useSidebarState();
 
     return (
-        <div class={`${style.container} ${isExpanded() ? style["container-focused"] : ""}`}>
+        <div
+            class={`${style.container} ${isExpanded() ? style["container-focused"] : ""}`}
+        >
             <Switch fallback={<p>Loading...</p>}>
                 <Match when={tjDataSource().type === "success"}>
                     <Content onSearchBarFocused={() => setIsExpanded(true)} />
@@ -25,22 +27,64 @@ export const Sidebar = () => {
     );
 };
 
-const Content = ({ onSearchBarFocused }: { onSearchBarFocused: () => void }) => {
+const Content = ({
+    onSearchBarFocused,
+}: {
+    onSearchBarFocused: () => void;
+}) => {
     const { tjDataSource, geoData, filter, setSelectedRouteTypes, setQuery } =
         useTransportData();
     const routeTypes = Object.values(RouteType) as Array<RouteType>;
     const [showAboutModal, setShowAboutModal] = createSignal<boolean>(false);
+    const [filteredStops, setFilteredStops] = createSignal<BusStop[]>([]);
+
+    const handleInputChange = (e: Event) => {
+        const query = (e.target as HTMLInputElement).value;
+        setQuery(query);
+
+        if (!geoData().busStops) return;
+        if (!query) {
+            setFilteredStops([]);
+            return;
+        }
+
+        const matches = geoData().busStops.filter((stop) => {
+            if (!stop || !stop.name) {
+                return false;
+            }
+            return stop.name.toLowerCase().includes(query.toLowerCase());
+        });
+
+        console.log(matches, e);
+        setFilteredStops(matches);
+    };
 
     return (
         <>
             <div class={style.header}>
                 <input
                     placeholder="Cari rute bus atau bus stop"
-                    onInput={(e) => setQuery(e.target.value)}
+                    onInput={handleInputChange}
                     onFocus={() => onSearchBarFocused()}
                     value={filter().query}
                     class={style.searchInput}
                 />
+                {filteredStops().length > 0 && (
+                    <ul class={style.autocompleteList}>
+                        <For each={filteredStops()}>
+                            {(stop) => (
+                                <li
+                                    class={style.autocompleteItem}
+                                    onClick={() => {
+                                        setQuery(stop.name);
+                                    }}
+                                >
+                                    {stop.name}
+                                </li>
+                            )}
+                        </For>
+                    </ul>
+                )}
                 <div class={style.filters}>
                     <For each={routeTypes}>
                         {(routeType) => (
