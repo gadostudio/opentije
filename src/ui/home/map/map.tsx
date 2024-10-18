@@ -10,7 +10,8 @@ import { useTransportData } from "../../../data/transport-data";
 import { useSidebarState } from "../../../data/sidebar-state";
 
 export const MapCanvas: Component = () => {
-    const { geoData, tjDataSource, setSelectedBusStop } = useTransportData();
+    const { geoData, tjDataSource, setSelectedBusStop, selectedEntry } =
+        useTransportData();
     const { setIsExpanded } = useSidebarState();
     const [libreMap, setLibreMap] = createSignal<Map | null>(null);
 
@@ -35,6 +36,43 @@ export const MapCanvas: Component = () => {
                 route.routeToGeoJson(),
             ),
         });
+
+        const entry = selectedEntry();
+        if (entry) {
+            if (entry.category === "Bus Stop") {
+                const selectedStop = geoData().busStops.find(
+                    (stop) => stop.id === entry.id,
+                );
+                if (selectedStop) {
+                    map.flyTo({
+                        center: [selectedStop.longitude, selectedStop.latitude],
+                        zoom: 16,
+                        speed: 0.5,
+                        curve: 2.5,
+                    });
+                }
+            } else {
+                map.flyTo({
+                    center: [
+                        jakartaCoordinate.longitude,
+                        jakartaCoordinate.latitude,
+                    ],
+                    zoom: 11,
+                    speed: 0.5,
+                    curve: 2.5,
+                });
+            }
+        } else {
+            map.flyTo({
+                center: [
+                    jakartaCoordinate.longitude,
+                    jakartaCoordinate.latitude,
+                ],
+                zoom: 12,
+                speed: 0.5,
+                curve: 2.5,
+            });
+        }
     });
 
     onMount(() => {
@@ -112,11 +150,11 @@ export const MapCanvas: Component = () => {
         });
     });
 
-    return <div
-        id="map"
-        class="map__canvas"
-        onClick={() => setIsExpanded(false)}
-    >
-
-        </div>;
+    return (
+        <div
+            id="map"
+            class="map__canvas"
+            onClick={() => setIsExpanded(false)}
+        ></div>
+    );
 };

@@ -139,6 +139,9 @@ export type TransportData = {
     geoData: Accessor<GeoData>;
     filter: Accessor<Filter>;
 
+    selectedEntry: Accessor<SelectedEntry | null>;
+    setSelectedEntry: (entry: SelectedEntry) => void;
+
     rightPopover: Accessor<PopOverState | null>;
     closeRightPopover: () => void;
     setSelectedBusStop: (id: string) => void;
@@ -169,6 +172,15 @@ export type PopOverBusStop = {
 };
 export type PopOverState = PopOverBusStop | null;
 
+export type SelectedEntry = {
+    category: "Bus Stop" | "Bus Route";
+    id: string;
+    name: string;
+    latitude?: number;
+    longitude?: number;
+    color?: string;
+} | null;
+
 export const TransportDataContext = createContext<TransportData>();
 
 export const useTransportData = () => useContext(TransportDataContext)!;
@@ -190,6 +202,8 @@ export const TransportDataProvider: ParentComponent = (props) => {
         selectedRouteIds: new Set(),
         selectedRouteTypes: new Set(),
     });
+    const [selectedEntry, setSelectedEntry] =
+        createSignal<SelectedEntry | null>(null);
 
     onMount(async () => {
         // Load route data
@@ -314,6 +328,8 @@ export const TransportDataProvider: ParentComponent = (props) => {
         geoData,
         filter,
         rightPopover,
+        selectedEntry,
+        setSelectedEntry,
         setSelectedBusStop: (id: string) => {
             const data = tjData().data;
             if (data === undefined) return;

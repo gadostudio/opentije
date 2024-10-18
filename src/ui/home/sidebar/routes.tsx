@@ -6,7 +6,27 @@ type RouteProps = {
 };
 
 export const Route = ({ route }: RouteProps) => {
-    const { filter, setSelectedRouteId } = useTransportData();
+    const { filter, setSelectedRouteId, setSelectedEntry } = useTransportData();
+
+    const handleCheckboxChange = (e: Event) => {
+        const isChecked = (e.target as HTMLInputElement).checked;
+
+        setSelectedRouteId(route.id, isChecked);
+
+        if (isChecked) {
+            setSelectedEntry({
+                category: "Bus Route",
+                id: route.id,
+                name: route.fullName,
+                color: route.color,
+            });
+        } else {
+            const selectedRoutes = filter().selectedRouteIds;
+            if (selectedRoutes.size === 0) {
+                setSelectedEntry(null);
+            }
+        }
+    };
 
     return (
         <li class="routes__route">
@@ -18,9 +38,7 @@ export const Route = ({ route }: RouteProps) => {
                 <input
                     type="checkbox"
                     checked={filter().selectedRouteIds.has(route.id)}
-                    onChange={(e) => {
-                        setSelectedRouteId(route.id, e.target.checked);
-                    }}
+                    onChange={handleCheckboxChange}
                 />
             </label>
         </li>

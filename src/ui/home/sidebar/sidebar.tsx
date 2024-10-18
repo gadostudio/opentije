@@ -3,7 +3,11 @@ import { createStore } from "solid-js/store";
 import { Route } from "./routes";
 import style from "./sidebar.module.scss";
 import { RouteType } from "../../../data/consumer";
-import { BusStop, useTransportData } from "../../../data/transport-data";
+import {
+    BusRoute,
+    BusStop,
+    useTransportData,
+} from "../../../data/transport-data";
 import { AboutModal } from "./about";
 import { useSidebarState } from "../../../data/sidebar-state";
 
@@ -27,36 +31,76 @@ export const Sidebar = () => {
     );
 };
 
+type FilteredResult = {
+    category: "Bus Stop" | "Bus Route";
+    id: string;
+    name: string;
+    latitude?: number;
+    longitude?: number;
+    color?: string;
+};
+
 const Content = ({
     onSearchBarFocused,
 }: {
     onSearchBarFocused: () => void;
 }) => {
-    const { tjDataSource, geoData, filter, setSelectedRouteTypes, setQuery } =
-        useTransportData();
+    const {
+        tjDataSource,
+        geoData,
+        filter,
+        setSelectedRouteTypes,
+        setSelectedRouteId,
+        setQuery,
+        setSelectedEntry,
+    } = useTransportData();
     const routeTypes = Object.values(RouteType) as Array<RouteType>;
     const [showAboutModal, setShowAboutModal] = createSignal<boolean>(false);
-    const [filteredStops, setFilteredStops] = createSignal<BusStop[]>([]);
+    const [filteredResults, setFilteredResults] = createSignal<
+        FilteredResult[]
+    >([]);
 
     const handleInputChange = (e: Event) => {
         const query = (e.target as HTMLInputElement).value;
         setQuery(query);
 
-        if (!geoData().busStops) return;
-        if (!query) {
-            setFilteredStops([]);
-            return;
-        }
+        if (!geoData().busStops || !geoData().busRoutes) return;
 
-        const matches = geoData().busStops.filter((stop) => {
-            if (!stop || !stop.name) {
-                return false;
+        const stopMatches: FilteredResult[] = geoData()
+            .busStops.filter((stop) =>
+                stop.name?.toLowerCase().includes(query.toLowerCase()),
+            )
+            .map((stop) => ({
+                category: "Bus Stop",
+                id: stop.id,
+                name: stop.name,
+                latitude: stop.latitude,
+                longitude: stop.longitude,
+            }));
+
+        const routeMatches: FilteredResult[] = geoData()
+            .busRoutes.filter((route) =>
+                route.fullName?.toLowerCase().includes(query.toLowerCase()),
+            )
+            .map((route) => ({
+                category: "Bus Route",
+                id: route.id,
+                name: route.fullName,
+                color: route.color,
+            }));
+
+        const matches: FilteredResult[] = [...routeMatches, ...stopMatches];
+
+        setFilteredResults(matches);
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Enter") {
+            if (filter().query === "") {
+                setFilteredResults([]);
+                setSelectedEntry(null);
             }
-            return stop.name.toLowerCase().includes(query.toLowerCase());
-        });
-
-        console.log(matches, e);
-        setFilteredStops(matches);
+        }
     };
 
     return (
@@ -65,21 +109,60 @@ const Content = ({
                 <input
                     placeholder="Cari rute bus atau bus stop"
                     onInput={handleInputChange}
+                    onKeyDown={handleKeyDown}
                     onFocus={() => onSearchBarFocused()}
                     value={filter().query}
                     class={style.searchInput}
                 />
-                {filteredStops().length > 0 && (
+                {filteredResults().length > 0 && (
                     <ul class={style.autocompleteList}>
-                        <For each={filteredStops()}>
-                            {(stop) => (
+                        <For each={filteredResults()}>
+                            {(matchedEntry) => (
                                 <li
                                     class={style.autocompleteItem}
                                     onClick={() => {
-                                        setQuery(stop.name);
+                                        setQuery(matchedEntry.name);
+                                        setSelectedEntry(matchedEntry);
+
+                                        let route = geoData().busRoutes.find(
+                                            (route) =>
+                                                route.id === matchedEntry.id,
+                                        );
+
+                                        if (route) {
+                                            if (
+                                                filter().selectedRouteIds.has(
+                                                    route.id,
+                                                )
+                                            ) {
+                                                setSelectedRouteId(
+                                                    route.id,
+                                                    false,
+                                                );
+                                            } else {
+                                                setSelectedRouteId(
+                                                    route.id,
+                                                    true,
+                                                );
+                                            }
+                                        }
+                                        setFilteredResults([]);
                                     }}
                                 >
-                                    {stop.name}
+                                    {matchedEntry.category === "Bus Stop" ? (
+                                        <div>
+                                            <span>Halte:</span>
+                                            <span>{matchedEntry.name}</span>
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            <span>Rute:</span>
+                                            <span>
+                                                {matchedEntry.id} |{" "}
+                                                {matchedEntry.name}
+                                            </span>
+                                        </div>
+                                    )}
                                 </li>
                             )}
                         </For>
