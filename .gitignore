@@ -7,3 +7,5 @@
 #.pnp.*
 node_modules/
 dist/
+.output/
+.vinxi/
