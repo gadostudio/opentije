@@ -112,11 +112,11 @@ export const MapCanvas: Component = () => {
         });
     });
 
-    return <div
-        id="map"
-        class="map__canvas"
-        onClick={() => setIsExpanded(false)}
-    >
-
-        </div>;
+    return (
+        <div
+            id="map"
+            class="map__canvas"
+            onClick={() => setIsExpanded(false)}
+        ></div>
+    );
 };

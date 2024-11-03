@@ -9,10 +9,12 @@ import { useSidebarState } from "../../../data/sidebar-state";
 
 export const Sidebar = () => {
     const { tjDataSource } = useTransportData();
-    const {isExpanded, setIsExpanded} = useSidebarState();
+    const { isExpanded, setIsExpanded } = useSidebarState();
 
     return (
-        <div class={`${style.container} ${isExpanded() ? style["container-focused"] : ""}`}>
+        <div
+            class={`${style.container} ${isExpanded() ? style["container-focused"] : ""}`}
+        >
             <Switch fallback={<p>Loading...</p>}>
                 <Match when={tjDataSource().type === "success"}>
                     <Content onSearchBarFocused={() => setIsExpanded(true)} />
@@ -25,7 +27,11 @@ export const Sidebar = () => {
     );
 };
 
-const Content = ({ onSearchBarFocused }: { onSearchBarFocused: () => void }) => {
+const Content = ({
+    onSearchBarFocused,
+}: {
+    onSearchBarFocused: () => void;
+}) => {
     const { tjDataSource, geoData, filter, setSelectedRouteTypes, setQuery } =
         useTransportData();
     const routeTypes = Object.values(RouteType) as Array<RouteType>;
