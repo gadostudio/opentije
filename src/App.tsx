@@ -1,15 +1,22 @@
 import { Component } from "solid-js";
-import { HomePage } from "./ui/home/HomePage";
-import { TransportDataProvider } from "./data/transport-data";
-import { SidebarStateProvider } from "./data/sidebar-state";
+import { MetaProvider, Title } from "@solidjs/meta";
+import { Router } from "@solidjs/router";
+import { FileRoutes } from "@solidjs/start/router";
+import { Suspense } from "solid-js";
+import "./global.scss";
 
 const App: Component = () => {
     return (
-        <TransportDataProvider>
-            <SidebarStateProvider>
-                <HomePage />
-            </SidebarStateProvider>
-        </TransportDataProvider>
+        <Router
+            root={(props) => (
+                <MetaProvider>
+                    <Title>Open Tije</Title>
+                    <Suspense>{props.children}</Suspense>
+                </MetaProvider>
+            )}
+        >
+            <FileRoutes />
+        </Router>
     );
 };
 

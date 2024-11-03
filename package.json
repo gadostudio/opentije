@@ -1,10 +1,11 @@
 {
     "name": "opentije",
+    "type": "module",
     "scripts": {
-        "start": "vite",
-        "dev": "vite",
-        "build": "vite build",
-        "serve": "vite preview",
+        "dev": "vinxi dev",
+        "build": "vinxi build",
+        "start": "vinxi start",
+        "version": "vinxi version",
         "format": "prettier --write ."
     },
     "devDependencies": {
@@ -14,14 +15,16 @@
         "prettier": "^3.3.3",
         "sass": "^1.77.6",
         "solid-devtools": "^0.30.1",
-        "typescript": "^5.5.2",
-        "vite": "^5.3.1",
-        "vite-plugin-solid": "^2.10.2"
+        "typescript": "^5.5.2"
     },
     "dependencies": {
         "@zip.js/zip.js": "^2.7.45",
         "maplibre-gl": "^4.7.1",
         "papaparse": "^5.4.1",
-        "solid-js": "^1.8.17"
+        "solid-js": "^1.9.2",
+        "@solidjs/meta": "^0.29.4",
+        "@solidjs/router": "^0.15.0",
+        "@solidjs/start": "^1.0.10",
+        "vinxi": "^0.4.3"
     }
 }
