@@ -1,12 +1,14 @@
 .container {
-    width: 320px;
+    width: 360px;
     position: fixed;
     right: 16px;
     background: white;
     border-radius: 16px 16px 0 0;
+    border: #00000040 1px solid;
 
     transition: all 0.5s ease-in-out;
     bottom: -100%;
+    padding: 16px;
 
     @supports (backdrop-filter: blur(60px)) {
         & {
@@ -17,5 +19,25 @@
 
     &.opened {
         bottom: 0;
+    }
+}
+
+.header {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+
+    .close-button {
+        margin-left: auto;
+        border: none;
+        background: none;
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .station-name {
+        font-weight: bold;
+        font-size: 24px;
+        margin: 0px;
     }
 }
