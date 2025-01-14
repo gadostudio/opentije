@@ -27,7 +27,7 @@
     border-radius: 16px 16px 0 0;
 
     @media (min-width: 481px) {
-        width: 300px;
+        width: 340px;
 
         right: 16px;
         left: auto;
@@ -50,14 +50,42 @@
 }
 
 .filters {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     margin-top: 8px;
     gap: 4px;
+    display: flex;
+    overflow-y: auto;
+    padding-bottom: 2px;
+
+    @media (min-width: 481px) {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        padding: 0px 8px;
+    }
 
     label {
-        display: inline-block;
-        min-height: 48px;
+        display: block;
+        min-width: 96px;
+        min-height: 32px;
+
+        &:first-child {
+            margin-left: 8px;
+        }
+
+        &:last-child {
+            margin-right: 8px;
+        }
+
+        @media (min-width: 481px) {
+            min-height: 48px;
+
+            &:first-child {
+                margin-left: 0px;
+            }
+
+            &:last-child {
+                margin-right: 0px;
+            }
+        }
 
         input {
             margin: 0;
@@ -97,7 +125,7 @@
 .header {
     border-bottom: #00000040 1px solid;
     box-sizing: border-box;
-    padding: 8px;
+    padding: 8px 0px 6px;
 }
 
 .routes {
@@ -120,7 +148,8 @@
 
 .searchInput {
     padding: 12px;
-    width: 100%;
+    margin: 0px 8px;
+    width: calc(100% - 16px);
     box-sizing: border-box;
     border-radius: 8px;
     border: #00000040 1px solid;
