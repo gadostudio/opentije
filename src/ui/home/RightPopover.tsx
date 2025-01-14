@@ -17,7 +17,7 @@ export const RightPopover: ParentComponent = () => {
     const { rightPopover } = useTransportData();
 
     const openedClass = () =>
-        rightPopover()?.type !== null ? style.opened : "";
+        rightPopover() !== null ? style.opened : "";
     const busStop = () => (rightPopover() as PopOverBusStop).busStop;
 
     return (
