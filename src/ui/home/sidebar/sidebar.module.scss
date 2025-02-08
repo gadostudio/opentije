@@ -6,13 +6,6 @@
     z-index: 10;
     background-color: rgb(247 250 255 / 100%);
 
-    @supports (backdrop-filter: blur(60px)) {
-        & {
-            backdrop-filter: blur(60px);
-            background-color: rgb(247 250 255 / 40%);
-        }
-    }
-
     position: fixed;
 
     width: 100%;
@@ -25,6 +18,13 @@
     transition: transform 0.25s ease-in-out;
 
     border-radius: 16px 16px 0 0;
+
+    @supports (backdrop-filter: blur(60px)) {
+        & {
+            backdrop-filter: blur(60px);
+            background-color: rgb(247 250 255 / 40%);
+        }
+    }
 
     @media (min-width: 481px) {
         border: none;
