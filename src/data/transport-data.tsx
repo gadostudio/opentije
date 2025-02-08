@@ -105,15 +105,19 @@ export class TJDataSource {
 
     getRoutes = (query: string, routeTypes: Set<string>): Array<BusRoute> => {
         const routes = Object.values(this.routes);
-        if (routeTypes.size === 0) return routes;
+
         return routes.filter((route) => {
-            if (!routeTypes.has(route.type)) {
-                return false;
+            let match = true;
+            if (query !== "") {
+                const idMatch = route.id.toLowerCase().includes(query);
+                const nameMatch = route.fullName.toLowerCase().includes(query);
+                match = idMatch || nameMatch;
             }
 
-            const idMatch = route.id.toLowerCase().includes(query);
-            const nameMatch = route.fullName.toLowerCase().includes(query);
-            return idMatch || nameMatch;
+            if (routeTypes.size > 0) {
+                match = match && routeTypes.has(route.type);
+            }
+            return match;
         });
     };
 
