@@ -1,6 +1,8 @@
-let socket = undefined;
+let socket: WebSocket | undefined = undefined;
 
 export function getRealtimeSocket(): WebSocket {
-    socket = new WebSocket('ws://opentije-realtime-bus.andra.id/');
+    if (!socket) {
+        socket = new WebSocket('wss://opentije-realtime-bus.andra.id/');
+    }
     return socket;
 }
