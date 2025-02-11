@@ -1,42 +1,26 @@
-import { Component, createEffect, createSignal, onMount } from "solid-js";
-import {
-    GeoJSONSource,
-    GeolocateControl,
-    Map,
-    NavigationControl,
-} from "maplibre-gl";
+import { Component, createSignal, onMount } from "solid-js";
+import { GeolocateControl, Map, NavigationControl } from "maplibre-gl";
 import { jakartaCoordinate } from "../../../constants";
-import { useTransportData } from "../../../data/transport-data";
 import { useSidebarState } from "../../../data/sidebar-state";
-import { getRealtimeSocket } from "../../../data/tj/realtime";
+import { useTjRealtimePositions } from "../../hooks/tj/realtime";
+import { installRealtimeBusLocation } from "./map-plugins";
+import { TjRealtimeConnectionControl } from "./tj-realtime-control";
+
+export enum MapLayer {
+    BusPositions = "opentije_bus_position",
+    BusPositionsLayer = "opentije_bus_position_layer",
+}
+
+export enum MapDataSource {
+    BusPositions = "opentije_bus_position",
+}
 
 export const MapCanvas: Component = () => {
-    const { geoData, tjDataSource, setSelectedBusStop } = useTransportData();
     const { setIsExpanded } = useSidebarState();
     const [libreMap, setLibreMap] = createSignal<Map | null>(null);
+    const { busPositions, connStatus } = useTjRealtimePositions();
 
-    createEffect(() => {
-        const map = libreMap();
-        if (map === null) return;
-
-        // const busStopsSource = map.getSource(
-        //     "opentije_bus_stops",
-        // ) as GeoJSONSource;
-        // busStopsSource.setData({
-        //     type: "FeatureCollection",
-        //     features: geoData().busStops.map((stop) => stop.geoJson),
-        // });
-
-        const busLanesSource = map.getSource(
-            "opentije_bus_lanes",
-        ) as GeoJSONSource;
-        busLanesSource.setData({
-            type: "FeatureCollection",
-            features: geoData().selectedRoutes.map((route) =>
-                route.routeToGeoJson(),
-            ),
-        });
-    });
+    installRealtimeBusLocation(busPositions, libreMap);
 
     onMount(() => {
         const map = new Map({
@@ -47,67 +31,7 @@ export const MapCanvas: Component = () => {
             attributionControl: false,
         });
         map.on("load", () => {
-            map.addSource("opentije_bus_position", {
-                type: "geojson",
-                data: {
-                    type: "FeatureCollection",
-                    features: [],
-                },
-            });
-            map.addLayer({
-                id: "opentije_bus_position",
-                type: "circle",
-                source: "opentije_bus_position",
-                paint: {
-                    "circle-color": ["get", "color"],
-                    "circle-radius": 15,
-                },
-            });
-            map.addLayer({
-                id: "opentije_bus_position_label",
-                type: "symbol",
-                source: "opentije_bus_position",
-                paint: {
-                    "text-color": ["get", "labelColor"],
-                },
-                // minzoom: 13,
-                layout: {
-                    "text-field": ["get", "routeCode"],
-                    "text-font": ["Noto Sans Regular"],
-                    "text-variable-anchor": ["center"],
-                    "text-radial-offset": 0.5,
-                    "text-justify": "auto",
-                },
-            });
-            
-            const busPositionSource = map.getSource(
-                "opentije_bus_position",
-            ) as GeoJSONSource;
-
-            const socket = getRealtimeSocket();
-            socket.onmessage = (event) => {
-                const busData = JSON.parse(event.data).busData;
-                const geoJsonData = busData.map(data => {
-                    return {
-                        type: "Feature",
-                        geometry: {
-                            type: "Point",
-                            coordinates: [data.longitude, data.latitude],
-                        },
-                        properties: {
-                            color: `#${data.route_color}`,
-                            routeCode: data.route_code,
-                            labelColor: `#${data.route_text_color}`,
-                        },
-                    }
-                });
-                
-                busPositionSource.setData({
-                    type: "FeatureCollection",
-                    features: geoJsonData,
-                });
-            };
-            
+            map.addControl(new TjRealtimeConnectionControl(connStatus));
             map.addControl(
                 new GeolocateControl({
                     positionOptions: {
@@ -118,57 +42,6 @@ export const MapCanvas: Component = () => {
                 }),
             );
             map.addControl(new NavigationControl());
-
-            // map.addSource("opentije_bus_stops", {
-            //     type: "geojson",
-            //     data: {
-            //         type: "FeatureCollection",
-            //         features: [],
-            //     },
-            // });
-            // map.addLayer({
-            //     id: "opentije_bus_stops-label",
-            //     type: "symbol",
-            //     source: "opentije_bus_stops",
-            //     minzoom: 13,
-            //     layout: {
-            //         "text-field": ["get", "name"],
-            //         "text-font": ["Noto Sans Regular"],
-            //         "text-variable-anchor": ["left", "right"],
-            //         "text-radial-offset": 0.5,
-            //         "text-justify": "auto",
-            //     },
-            // });
-            // map.addLayer({
-            //     id: "opentije_bus_stops",
-            //     type: "circle",
-            //     source: "opentije_bus_stops",
-            //     paint: {
-            //         "circle-color": ["get", "color"],
-            //     },
-            // });
-
-            map.addSource("opentije_bus_lanes", {
-                type: "geojson",
-                data: {
-                    type: "FeatureCollection",
-                    features: [],
-                },
-            });
-            map.addLayer({
-                id: "opentije_bus_lanes",
-                type: "line",
-                source: "opentije_bus_lanes",
-                paint: {
-                    "line-width": 3,
-                    "line-color": ["get", "color"],
-                },
-            });
-
-            map.on("click", "opentije_bus_stops", (target) => {
-                const busStopId = target.features![0].properties.id;
-                setSelectedBusStop(busStopId);
-            });
 
             setLibreMap(map);
         });

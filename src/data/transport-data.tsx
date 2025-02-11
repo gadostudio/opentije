@@ -149,6 +149,7 @@ export type TransportData = {
     clearSelectedRouteTypes: () => void;
 
     setSelectedRouteId: (routeId: string, selected: boolean) => void;
+    selectedRouteIds: Accessor<Set<string>>;
 };
 
 export type GeoData = {
@@ -362,6 +363,7 @@ export const TransportDataProvider: ParentComponent = (props) => {
                 ...prev,
                 selectedRouteTypes: new Set(),
             })),
+        selectedRouteIds: () => filter().selectedRouteIds,
     };
     return (
         <TransportDataContext.Provider value={controller}>
