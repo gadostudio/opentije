@@ -17,7 +17,7 @@ export const RightPopover: ParentComponent = () => {
     const { rightPopover } = useTransportData();
 
     const openedClass = () =>
-        rightPopover()?.type !== null ? style.opened : "";
+        rightPopover() !== null ? style.opened : "";
     const busStop = () => (rightPopover() as PopOverBusStop).busStop;
 
     return (
@@ -40,10 +40,9 @@ const BusStop = ({ busStop }: BusStopProps) => {
 
     return (
         <div>
-            <div>
-                <p>{busStop().id}</p>
-                <p>{busStop().name}</p>
-                <button onClick={() => closeRightPopover()}>Close</button>
+            <div class={style.header}>
+                <p class={style['station-name']}>{busStop().name}</p>
+                <button class={style['close-button']} onClick={() => closeRightPopover()}>×</button>
             </div>
             <div>
                 <For each={busStop().servedRouteIds}>

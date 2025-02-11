@@ -1,12 +1,15 @@
 .container {
-    width: 320px;
+    box-sizing: border-box;
+    width: 100%;
     position: fixed;
-    right: 16px;
     background: white;
     border-radius: 16px 16px 0 0;
+    border: #00000040 1px solid;
 
     transition: all 0.5s ease-in-out;
     bottom: -100%;
+    padding: 16px;
+    padding-bottom: 60px;
 
     @supports (backdrop-filter: blur(60px)) {
         & {
@@ -15,7 +18,33 @@
         }
     }
 
+    @media (min-width: 481px) {
+        width: 360px;
+        right: 16px;
+        padding-bottom: 16px;
+    }
+
     &.opened {
         bottom: 0;
+    }
+}
+
+.header {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+
+    .close-button {
+        margin-left: auto;
+        border: none;
+        background: none;
+        font-weight: bold;
+        font-size: 24px;
+    }
+
+    .station-name {
+        font-weight: bold;
+        font-size: 24px;
+        margin: 0px;
     }
 }
