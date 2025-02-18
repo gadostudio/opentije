@@ -12,19 +12,12 @@ export const AboutModal = (param: AboutModalParam) => {
             <div class={style.overlay}>
                 <h1>About OpenTije 🚌🗺️</h1>
                 <p>
-                    Discover bus stops and routes on the map for all bus
-                    services in Jakarta, complete with real-time bus arrival
-                    information and an overview of passing routes at each stop.
+                    Discover stops and routes on the map for all bus & train
+                    services in Jakarta, complete with real-time arrival
+                    information and an overview of passing routes at each stops.
                 </p>
-                <p>Built with ❤️ by Gado Project.</p>
-                <p>
-                    No affiliation with PT. Transjakarta. Just for demonstration
-                    work.
-                </p>
-                <p>
-                    Visit our github page{" "}
-                    <a href="https://github.com/gadostudio">Here</a>
-                </p>
+                <p>Built with ❤️ by Gado Studio.</p>
+                <p>No affiliation with other service provides.</p>
                 <p>For inquires please email: andra.antariksa[at]gmail.com</p>
                 <button onClick={() => param.onHide()}>Close</button>
             </div>
