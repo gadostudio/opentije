@@ -2,7 +2,7 @@ import { Accessor, For, Match, Switch, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 import { Route } from "./routes";
 import style from "./sidebar.module.scss";
-import { RouteType } from "../../../data/consumer";
+import { RouteType } from "../../../data/tj/gtfs";
 import { useTransportData } from "../../../data/transport-data";
 import { AboutModal } from "./about";
 import { useSidebarState } from "../../../data/sidebar-state";

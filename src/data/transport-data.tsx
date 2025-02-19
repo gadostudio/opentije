@@ -9,7 +9,7 @@ import {
 } from "solid-js";
 import { Point, Feature, MultiLineString, Position } from "geojson";
 import { Result } from "../utils/result";
-import { getRawData, RouteRawData, RouteType, ShapeRawData } from "./consumer";
+import { getRawData, RouteRawData, RouteType, ShapeRawData } from "./tj/gtfs";
 import { DefaultMap } from "../utils/container";
 
 export class BusTrip {
@@ -153,6 +153,7 @@ export type TransportData = {
     clearSelectedRouteTypes: () => void;
 
     setSelectedRouteId: (routeId: string, selected: boolean) => void;
+    selectedRouteIds: Accessor<Set<string>>;
 };
 
 export type GeoData = {
@@ -366,6 +367,7 @@ export const TransportDataProvider: ParentComponent = (props) => {
                 ...prev,
                 selectedRouteTypes: new Set(),
             })),
+        selectedRouteIds: () => filter().selectedRouteIds,
     };
     return (
         <TransportDataContext.Provider value={controller}>
