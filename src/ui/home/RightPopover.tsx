@@ -16,8 +16,7 @@ import style from "./RightPopover.module.scss";
 export const RightPopover: ParentComponent = () => {
     const { rightPopover } = useTransportData();
 
-    const openedClass = () =>
-        rightPopover() !== null ? style.opened : "";
+    const openedClass = () => (rightPopover() !== null ? style.opened : "");
     const busStop = () => (rightPopover() as PopOverBusStop).busStop;
 
     return (
@@ -41,8 +40,13 @@ const BusStop = ({ busStop }: BusStopProps) => {
     return (
         <div>
             <div class={style.header}>
-                <p class={style['station-name']}>{busStop().name}</p>
-                <button class={style['close-button']} onClick={() => closeRightPopover()}>×</button>
+                <p class={style["station-name"]}>{busStop().name}</p>
+                <button
+                    class={style["close-button"]}
+                    onClick={() => closeRightPopover()}
+                >
+                    ×
+                </button>
             </div>
             <div>
                 <For each={busStop().servedRouteIds}>

@@ -76,13 +76,28 @@ const Content = ({
                     ))}
                 </ul>
             </div>
-            <div class="sidebar__about">
-                <button
-                    class="about-button"
-                    onClick={() => setShowAboutModal(true)}
-                >
-                    Tentang OpenTije
-                </button>
+            <div class={style.footer}>
+                {/* TODO language switcher */}
+                <div></div>
+                <div class={style.footerRight}>
+                    <a
+                        href="https://github.com/gadoproject/opentije"
+                        target="_blank"
+                    >
+                        <img
+                            src="/assets/image/github.svg"
+                            alt="GitHub"
+                            class={style.footerIcon}
+                        />
+                    </a>
+                    <a onClick={() => setShowAboutModal(true)}>
+                        <img
+                            src="/assets/image/info.svg"
+                            alt="Info"
+                            class={style.footerIcon}
+                        />
+                    </a>
+                </div>
             </div>
             <AboutModal
                 show={showAboutModal()}
