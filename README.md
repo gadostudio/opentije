@@ -6,5 +6,5 @@ Licensed under [Attribution-NonCommercial 4.0](https://creativecommons.org/licen
 
 Singkatnya, di bawah lisensi ini:
 
--   Attribution — Anda harus memberikan kredit ke proyek ini.
--   NonCommercial — Dilarang keras mengkomersialisasikan software ini.
+- Attribution — Anda harus memberikan kredit ke proyek ini.
+- NonCommercial — Dilarang keras mengkomersialisasikan software ini.

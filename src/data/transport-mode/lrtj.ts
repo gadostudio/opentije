@@ -1,11 +1,5 @@
-import { TransportMode } from ".";
+import { Route, Stop, TransportMode } from ".";
 
-export class LrtjMode implements TransportMode {
-    name: string = 'LRT Jakarta';
-
-    constructor(routeIds: Array<string>, stopIds: Array<string>) {
-        super();
-        this.routeIds = new Set(routeIds);
-        this.stopIds = new Set(stopIds);
-    };
-};
+export class LrtjMode extends TransportMode {
+    name: string = "LRT Jakarta";
+}

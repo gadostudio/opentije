@@ -3,26 +3,18 @@ import { createStore } from "solid-js/store";
 import { Route } from "./routes";
 import style from "./sidebar.module.scss";
 import { RouteType } from "../../../data/consumer";
-import { useTransportData } from "../../../data/transport-data";
 import { AboutModal } from "./about";
 import { useSidebarState } from "../../../data/sidebar-state";
+import { useTransportController } from "../../../data/transport-controller";
 
 export const Sidebar = () => {
-    const { tjDataSource } = useTransportData();
     const { isExpanded, setIsExpanded } = useSidebarState();
 
     return (
         <div
             class={`${style.container} ${isExpanded() ? style["container-focused"] : ""}`}
         >
-            <Switch fallback={<p>Loading...</p>}>
-                <Match when={tjDataSource().type === "success"}>
-                    <Content onSearchBarFocused={() => setIsExpanded(true)} />
-                </Match>
-                <Match when={tjDataSource().type === "error"}>
-                    <p>Error</p>
-                </Match>
-            </Switch>
+            <Content onSearchBarFocused={() => setIsExpanded(true)} />
         </div>
     );
 };
@@ -32,8 +24,7 @@ const Content = ({
 }: {
     onSearchBarFocused: () => void;
 }) => {
-    const { tjDataSource, geoData, filter, setSelectedRouteTypes, setQuery } =
-        useTransportData();
+    const { stops, routes } = useTransportController();
     const routeTypes = Object.values(RouteType) as Array<RouteType>;
     const [showAboutModal, setShowAboutModal] = createSignal<boolean>(false);
 
@@ -42,9 +33,9 @@ const Content = ({
             <div class={style.header}>
                 <input
                     placeholder="Cari rute bus atau bus stop"
-                    onInput={(e) => setQuery(e.target.value)}
+                    onInput={(e) => {}}
                     onFocus={() => onSearchBarFocused()}
-                    value={filter().query}
+                    value={""}
                     class={style.searchInput}
                 />
                 <div class={style.filters}>
@@ -53,15 +44,8 @@ const Content = ({
                             <label>
                                 <input
                                     type="checkbox"
-                                    checked={filter().selectedRouteTypes.has(
-                                        routeType,
-                                    )}
-                                    onChange={(e) => {
-                                        setSelectedRouteTypes(
-                                            routeType,
-                                            e.target.checked,
-                                        );
-                                    }}
+                                    checked={true}
+                                    onChange={(e) => {}}
                                 />
                                 <p>{routeType}</p>
                             </label>
@@ -71,7 +55,7 @@ const Content = ({
             </div>
             <div class="sidebar__routes">
                 <ul class={style.routes}>
-                    {geoData().busRoutes.map((route) => (
+                    {routes().map((route) => (
                         <Route route={route} />
                     ))}
                 </ul>

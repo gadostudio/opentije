@@ -1,9 +1,5 @@
 import { TransportMode } from ".";
 
-export class LrtJabodebekMode implements TransportMode {
-    name: string = 'LRT Jabodebek';
-
-    LrtJabodebekMode() {
-
-    }
-};
+export class LrtJabodebekMode extends TransportMode {
+    name: string = "LRT Jabodebek";
+}

@@ -9,22 +9,22 @@ import {
 import {
     BusStop as BusStopType,
     PopOverBusStop,
-    useTransportData,
 } from "../../data/transport-data";
 import style from "./RightPopover.module.scss";
+import { useTransportController } from "../../data/transport-controller";
+import { Stop } from "../../data/transport-mode";
 
 export const RightPopover: ParentComponent = () => {
-    const { rightPopover } = useTransportData();
+    const { rightPopover } = useTransportController();
 
-    const openedClass = () =>
-        rightPopover() !== null ? style.opened : "";
-    const busStop = () => (rightPopover() as PopOverBusStop).busStop;
+    const openedClass = () => (rightPopover() !== null ? style.opened : "");
+    const stop = () => (rightPopover() as PopOverBusStop).stop;
 
     return (
         <div class={`${style.container} ${openedClass()}`}>
             <Switch>
-                <Match when={rightPopover()?.type === "bus_stop"}>
-                    <BusStop busStop={busStop} />
+                <Match when={rightPopover()?.type === "stop"}>
+                    <BusStop stop={stop} />
                 </Match>
             </Switch>
         </div>
@@ -32,20 +32,25 @@ export const RightPopover: ParentComponent = () => {
 };
 
 type BusStopProps = {
-    busStop: Accessor<BusStopType>;
+    stop: Accessor<Stop>;
 };
 
-const BusStop = ({ busStop }: BusStopProps) => {
-    const { closeRightPopover } = useTransportData();
+const BusStop = ({ stop }: BusStopProps) => {
+    const { closeRightPopover } = useTransportController();
 
     return (
         <div>
             <div class={style.header}>
-                <p class={style['station-name']}>{busStop().name}</p>
-                <button class={style['close-button']} onClick={() => closeRightPopover()}>×</button>
+                <p class={style["station-name"]}>{stop().name}</p>
+                <button
+                    class={style["close-button"]}
+                    onClick={() => closeRightPopover()}
+                >
+                    ×
+                </button>
             </div>
             <div>
-                <For each={busStop().servedRouteIds}>
+                <For each={stop().servedRoutes}>
                     {(routeId) => <p>{routeId}</p>}
                 </For>
             </div>

@@ -9,8 +9,9 @@ import {
 } from "solid-js";
 import { Point, Feature, MultiLineString, Position } from "geojson";
 import { Result } from "../utils/result";
-import { getRawData, RouteRawData, RouteType, ShapeRawData } from "./consumer";
+import { RouteRawData, RouteType, ShapeRawData } from "./consumer";
 import { DefaultMap } from "../utils/container";
+import { Stop } from "./transport-mode";
 
 export class BusTrip {
     constructor(
@@ -138,23 +139,6 @@ export class TJDataSource {
     };
 }
 
-export type TransportData = {
-    tjDataSource: Accessor<Result<TJDataSource>>;
-    geoData: Accessor<GeoData>;
-    filter: Accessor<Filter>;
-
-    rightPopover: Accessor<PopOverState | null>;
-    closeRightPopover: () => void;
-    setSelectedBusStop: (id: string) => void;
-
-    setQuery: (query: string) => void;
-
-    setSelectedRouteTypes: (routeId: RouteType, selected: boolean) => void;
-    clearSelectedRouteTypes: () => void;
-
-    setSelectedRouteId: (routeId: string, selected: boolean) => void;
-};
-
 export type GeoData = {
     busStops: Array<BusStop>;
     busRoutes: Array<BusRoute>;
@@ -168,208 +152,7 @@ export type Filter = {
 };
 
 export type PopOverBusStop = {
-    type: "bus_stop";
-    busStop: BusStop;
+    type: "stop";
+    stop: Stop;
 };
 export type PopOverState = PopOverBusStop | null;
-
-export const TransportDataContext = createContext<TransportData>();
-
-export const useTransportData = () => useContext(TransportDataContext)!;
-
-export const TransportDataProvider: ParentComponent = (props) => {
-    const [tjData, setTjData] = createSignal<Result<TJDataSource>>({
-        type: "loading",
-    });
-    const [rightPopover, setRightPopover] = createSignal<PopOverState>(null, {
-        equals: false,
-    });
-    const [geoData, setGeoData] = createSignal<GeoData>({
-        busStops: [],
-        busRoutes: [],
-        selectedRoutes: [],
-    });
-    const [filter, setFilter] = createSignal<Filter>({
-        query: "",
-        selectedRouteIds: new Set(),
-        selectedRouteTypes: new Set(),
-    });
-
-    onMount(async () => {
-        // Load route data
-        const {
-            routesRawData,
-            stopsRawData,
-            tripsRawData,
-            shapesRawData,
-            stopTimesRawData,
-        } = await getRawData();
-
-        // Populate trips and shapes
-        const rawShapes = new DefaultMap<string, Array<ShapeRawData>>(() => []);
-        for (const shapeRawData of shapesRawData) {
-            rawShapes.get(shapeRawData.shape_id).push(shapeRawData);
-        }
-
-        for (const shapes of rawShapes.values()) {
-            shapes.sort((shape) => shape.shape_pt_sequence);
-        }
-
-        // Map trips to routes
-        const tripsRaw = new DefaultMap<string, Array<TripRaw>>(() => []);
-        const tripIdToRouteId: Record<string, string> = {};
-        for (const tripRawData of tripsRawData) {
-            tripsRaw.get(tripRawData.route_id).push({
-                tripId: tripRawData.trip_id,
-                shapes: rawShapes.get(tripRawData.shape_id),
-            });
-            tripIdToRouteId[tripRawData.trip_id] = tripRawData.route_id;
-        }
-
-        const tripStopIds = new DefaultMap<string, Set<string>>(
-            () => new Set(),
-        );
-        const routesServedByStop = new DefaultMap<string, Set<string>>(
-            () => new Set(),
-        );
-        for (const stopTime of stopTimesRawData) {
-            tripStopIds.get(stopTime.trip_id).add(stopTime.stop_id);
-            routesServedByStop
-                .get(stopTime.stop_id)
-                .add(tripIdToRouteId[stopTime.trip_id]);
-        }
-
-        const stopsMap: Record<string, BusStop> = {};
-        for (const stopRawData of stopsRawData) {
-            const stop = new BusStop(
-                stopRawData.stop_id,
-                stopRawData.stop_name,
-                stopRawData.stop_lat,
-                stopRawData.stop_lon,
-                routesServedByStop.get(stopRawData.stop_id),
-            );
-            stopsMap[stop.id] = stop;
-        }
-
-        const routes: Record<string, BusRoute> = {};
-        for (const routeRawData of routesRawData) {
-            if (!routeRawData.agency_id) {
-                continue;
-            }
-
-            const routeStops: Array<BusStop> = [];
-
-            const trips: Array<BusTrip> = [];
-            for (const tripRaw of tripsRaw.get(routeRawData.route_id)) {
-                const trip = new BusTrip(tripRaw.tripId, tripRaw.shapes);
-                trips.push(trip);
-
-                const stopIds = tripStopIds.get(trip.id);
-                for (const stopId of stopIds) {
-                    const stop = stopsMap[stopId];
-                    routeStops.push(stop);
-                }
-            }
-
-            routes[routeRawData.route_id] = new BusRoute(
-                routeRawData,
-                routeStops,
-                trips,
-            );
-        }
-
-        setTjData({
-            type: "success",
-            data: new TJDataSource(routes, stopsMap),
-        });
-    });
-
-    createEffect(() => {
-        const data = tjData().data;
-        if (data === undefined) return;
-
-        const { query, selectedRouteTypes, selectedRouteIds } = filter();
-
-        const busStops: Array<BusStop> = [];
-        if (selectedRouteIds.size > 0) {
-            for (const routeId of selectedRouteIds) {
-                const route = data.getRoute(routeId);
-                busStops.push(...route.stops);
-            }
-        } else {
-            busStops.push(...data.getStops());
-        }
-
-        const busRoutes = data.getRoutes(query, selectedRouteTypes);
-        const selectedRoutes = [];
-        for (const routeId of selectedRouteIds) {
-            const route = data.getRoute(routeId);
-            selectedRoutes.push(route);
-        }
-        setGeoData({
-            busStops,
-            selectedRoutes,
-            busRoutes,
-        });
-    });
-
-    const controller: TransportData = {
-        tjDataSource: tjData,
-        geoData,
-        filter,
-        rightPopover,
-        setSelectedBusStop: (id: string) => {
-            const data = tjData().data;
-            if (data === undefined) return;
-
-            setRightPopover(() => ({
-                type: "bus_stop",
-                busStop: data.getStop(id),
-            }));
-        },
-        closeRightPopover: () => {
-            setRightPopover(() => null);
-        },
-        setQuery: (query: string) =>
-            setFilter((prev) => ({
-                ...prev,
-                query,
-            })),
-        setSelectedRouteId: (routeId: string, selected: boolean) =>
-            setFilter((prev) => {
-                const selectedRouteIds = new Set(prev.selectedRouteIds);
-                if (selected) {
-                    selectedRouteIds.add(routeId);
-                } else {
-                    selectedRouteIds.delete(routeId);
-                }
-                return {
-                    ...prev,
-                    selectedRouteIds,
-                };
-            }),
-        setSelectedRouteTypes: (routeType: RouteType, selected: boolean) =>
-            setFilter((prev) => {
-                const selectedRouteTypes = new Set(prev.selectedRouteTypes);
-                if (selected) {
-                    selectedRouteTypes.add(routeType);
-                } else {
-                    selectedRouteTypes.delete(routeType);
-                }
-                return {
-                    ...prev,
-                    selectedRouteTypes,
-                };
-            }),
-        clearSelectedRouteTypes: () =>
-            setFilter((prev) => ({
-                ...prev,
-                selectedRouteTypes: new Set(),
-            })),
-    };
-    return (
-        <TransportDataContext.Provider value={controller}>
-            {props.children}
-        </TransportDataContext.Provider>
-    );
-};

@@ -1,25 +1,26 @@
-import { BusRoute, useTransportData } from "../../../data/transport-data";
+import { Route as RouteType } from "../../../data/transport-mode";
 import style from "./routes.module.scss";
+import { useTransportController } from "../../../data/transport-controller";
 
 type RouteProps = {
-    route: BusRoute;
+    route: RouteType;
 };
 
 export const Route = ({ route }: RouteProps) => {
-    const { filter, setSelectedRouteId } = useTransportData();
+    const { filter } = useTransportController();
 
     return (
         <li class="routes__route">
             <label class={style.container}>
                 <span class={style.badge} style={`background: #${route.color}`}>
-                    {route.id}
+                    {route.shortName}
                 </span>
                 <p class={style.label}>{route.fullName}</p>
                 <input
                     type="checkbox"
-                    checked={filter().selectedRouteIds.has(route.id)}
+                    checked={true} //filter().selectedRouteIds.has(route.id)}
                     onChange={(e) => {
-                        setSelectedRouteId(route.id, e.target.checked);
+                        // setSelectedRouteId(route.id, e.target.checked);
                     }}
                 />
             </label>
