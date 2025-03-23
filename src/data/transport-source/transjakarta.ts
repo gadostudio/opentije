@@ -2,8 +2,7 @@ import { TransportModeLoader } from ".";
 import { BlobReader, Entry, TextWriter, ZipReader } from "@zip.js/zip.js";
 import Papa from "papaparse";
 import { TransjakartaMode } from "../transport-mode/transjakarta";
-import { RouteType } from "../consumer";
-import { Route, Stop } from "../transport-mode";
+import { ModeType, Route, Stop, StopType, Trip } from "../transport-mode";
 import { DefaultMap } from "../../utils/container";
 import { BusStop, BusTrip, TripRaw } from "../transport-data";
 
@@ -86,18 +85,24 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
     await zipReader.close();
 
     const tj = new TransjakartaMode();
-    tj.stops = stopsRawData.map((stop) => {
-        return new Stop(stop.stop_id, stop.stop_name, "bus-stop", {
-            latitude: stop.stop_lat,
-            longitude: stop.stop_lon,
+    tj.stops = stopsRawData
+        .filter((rawStop) => rawStop.stop_id)
+        .map((rawStop) => {
+            const stop = new Stop();
+            stop.id = rawStop.stop_id;
+            stop.name = rawStop.stop_name;
+            stop.type = StopType.BusStop;
+            stop.coordinate = {
+                latitude: rawStop.stop_lat,
+                longitude: rawStop.stop_lon,
+            };
+            return stop;
         });
-    });
-    tj.routes = stopsRawData.map((stop) => {
-        return new Stop(stop.stop_id, stop.stop_name, "bus-stop", {
-            latitude: stop.stop_lat,
-            longitude: stop.stop_lon,
-        });
-    });
+
+    const stops: Record<string, Stop> = {};
+    for (const stop of tj.stops) {
+        stops[stop.id] = stop;
+    }
 
     // Populate trips and shapes
     const rawShapes = new DefaultMap<string, Array<ShapeRawData>>(() => []);
@@ -137,24 +142,31 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
             continue;
         }
 
+        const route = new Route();
+        (route.id = routeRawData.route_id),
+            (route.fullName = routeRawData.route_long_name);
+        route.shortName = routeRawData.route_id;
+        route.color = routeRawData.route_color;
+        route.type = ModeType.Bus;
+
         const routeStops: Array<Stop> = [];
 
-        const trips: Array<BusTrip> = [];
+        const trips: Array<Trip> = [];
         for (const tripRaw of tripsRaw.get(routeRawData.route_id)) {
-            const trip = new BusTrip(tripRaw.tripId, tripRaw.shapes);
+            const trip = new Trip();
+            trip.id = tripRaw.tripId;
+            trip.shapes = tripRaw.shapes;
             trips.push(trip);
 
             const stopIds = tripStopIds.get(trip.id);
-            // TODO populate stops
+            for (const stopId of stopIds) {
+                const stop = stops[stopId];
+                stop.servedRoutes.push(route);
+                routeStops.push(stop);
+            }
         }
-
-        const route = new Route(
-            routeRawData.route_id,
-            routeRawData.route_long_name,
-            routeRawData.route_id,
-            routeRawData.route_color,
-        );
-        route.stopIds = routeStops.map((stop) => stop.id);
+        route.stops = routeStops;
+        route.trips = trips;
 
         routes[routeRawData.route_id] = route;
     }
@@ -169,7 +181,7 @@ export type RouteRawData = {
     agency_id: string;
     route_short_name: string;
     route_long_name: string;
-    route_desc: RouteType;
+    route_desc: TransjakartaRouteType;
     route_color: string;
     route_text_color: string;
 };
@@ -205,3 +217,13 @@ export type StopTimeRawData = {
     trip_id: string;
     stop_id: string;
 };
+
+export enum TransjakartaRouteType {
+    BRT = "BRT",
+    Mikrotrans = "Mikrotrans",
+    Integrasi = "Angkutan Umum Integrasi",
+    Rusun = "Rusun",
+    Royaltrans = "Royaltrans",
+    Transjabodetabek = "Transjabodetabek",
+    BusWisata = "Bus Wisata",
+}

@@ -11,11 +11,12 @@ import {
     PopOverBusStop,
 } from "../../data/transport-data";
 import style from "./RightPopover.module.scss";
-import { useTransportController } from "../../data/transport-controller";
+import { useTransportController } from "../../data/states/transport-controller";
 import { Stop } from "../../data/transport-mode";
+import { useMapUiState } from "../../data/states/sidebar-state";
 
 export const RightPopover: ParentComponent = () => {
-    const { rightPopover } = useTransportController();
+    const { rightPopover } = useMapUiState();
 
     const openedClass = () => (rightPopover() !== null ? style.opened : "");
     const stop = () => (rightPopover() as PopOverBusStop).stop;
@@ -36,7 +37,7 @@ type BusStopProps = {
 };
 
 const BusStop = ({ stop }: BusStopProps) => {
-    const { closeRightPopover } = useTransportController();
+    const { closeRightPopover } = useMapUiState();
 
     return (
         <div>
@@ -51,7 +52,7 @@ const BusStop = ({ stop }: BusStopProps) => {
             </div>
             <div>
                 <For each={stop().servedRoutes}>
-                    {(routeId) => <p>{routeId}</p>}
+                    {(route) => <p>{route.id}</p>}
                 </For>
             </div>
         </div>

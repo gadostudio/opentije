@@ -9,7 +9,7 @@ import {
 } from "solid-js";
 import { Point, Feature, MultiLineString, Position } from "geojson";
 import { Result } from "../utils/result";
-import { RouteRawData, RouteType, ShapeRawData } from "./consumer";
+import { RouteRawData, TransjakartaRouteType, ShapeRawData } from "./consumer";
 import { DefaultMap } from "../utils/container";
 import { Stop } from "./transport-mode";
 
@@ -60,7 +60,7 @@ export class BusRoute {
     id: string;
     fullName: string;
     color: string;
-    type: RouteType;
+    type: TransjakartaRouteType;
 
     constructor(
         rawData: RouteRawData,
@@ -148,7 +148,7 @@ export type GeoData = {
 export type Filter = {
     query: string;
     selectedRouteIds: Set<string>;
-    selectedRouteTypes: Set<RouteType>;
+    selectedRouteTypes: Set<TransjakartaRouteType>;
 };
 
 export type PopOverBusStop = {

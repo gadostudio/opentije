@@ -4,7 +4,7 @@ import { CommuterlineMode } from "../transport-mode/commuterline";
 import { LrtjMode } from "../transport-mode/lrtj";
 import { LrtJabodebekMode } from "../transport-mode/lrtjabodebek";
 import { MrtjMode } from "../transport-mode/mrtj";
-import { Route, Stop } from "../transport-mode";
+import { ModeType, Route, Stop, StopType } from "../transport-mode";
 
 export const loadRailsTransportMode: TransportModeLoader = async () => {
     const response = await fetch("assets/transport-data/rails.kml");
@@ -21,18 +21,22 @@ export const loadRailsTransportMode: TransportModeLoader = async () => {
         const [longitude, latitude] = placemark.Point.coordinates
             .split(",")
             .map(parseFloat);
-        return new Stop(placemark.name, placemark.name, "station", {
+        const stop = new Stop();
+        stop.id = placemark.name;
+        stop.name = placemark.name;
+        stop.type = StopType.Station;
+        stop.coordinate = {
             latitude,
             longitude,
-        });
+        };
+        return stop;
     });
-    const mrtjRoute = new Route(
-        "mrtj",
-        "MRTJ Lin Utara Selatan",
-        "M",
-        "FF0000",
-    );
-    mrtjRoute.stopIds = mrtjStations.map((station) => station.id);
+    const mrtjRoute = new Route();
+    (mrtjRoute.id = "mrtj"), (mrtjRoute.fullName = "MRTJ Lin Utara Selatan");
+    mrtjRoute.shortName = "M";
+    mrtjRoute.color = "FF0000";
+    mrtjRoute.type = ModeType.Train;
+    mrtjRoute.stops = mrtjStations;
 
     const mrtj = new MrtjMode();
     mrtj.stops = mrtjStations;
@@ -76,18 +80,23 @@ export const loadRailsTransportMode: TransportModeLoader = async () => {
             const [longitude, latitude] = placemark.Point.coordinates
                 .split(",")
                 .map(parseFloat);
-            return new Stop(placemark.name, placemark.name, "station", {
+            const stop = new Stop();
+            stop.id = placemark.name;
+            stop.name = placemark.name;
+            stop.type = StopType.Station;
+            stop.coordinate = {
                 latitude,
                 longitude,
-            });
+            };
+            return stop;
         });
-        const route = new Route(
-            folder.name,
-            folder.name,
-            lineMapping[folder.name].shortName,
-            lineMapping[folder.name].color,
-        );
-        route.stopIds = stations.map((station) => station.id);
+        const route = new Route();
+        route.id = folder.name;
+        route.fullName = folder.name;
+        route.shortName = lineMapping[folder.name].shortName;
+        route.color = lineMapping[folder.name].color;
+        route.type = ModeType.Train;
+        route.stops = stations;
 
         for (const station of stations) {
             if (
@@ -112,21 +121,24 @@ export const loadRailsTransportMode: TransportModeLoader = async () => {
             const [longitude, latitude] = placemark.Point.coordinates
                 .split(",")
                 .map(parseFloat);
-            return new Stop(placemark.name, placemark.name, "station", {
+            const stop = new Stop();
+            stop.id = placemark.name;
+            stop.name = placemark.name;
+            stop.type = StopType.Station;
+            stop.coordinate = {
                 latitude,
                 longitude,
-            });
+            };
+            return stop;
         },
     );
-    const lrtJabodebekRoute = new Route(
-        "lrtjabodebek",
-        "LRT Jabodebek (Lin Cibubur & Bekasi)",
-        "BK",
-        "046C37",
-    );
-    lrtJabodebekRoute.stopIds = lrtJabodebekStations.map(
-        (station) => station.id,
-    );
+    const lrtJabodebekRoute = new Route();
+    lrtJabodebekRoute.id = "lrtjabodebek";
+    lrtJabodebekRoute.fullName = "LRT Jabodebek (Lin Cibubur & Bekasi)";
+    lrtJabodebekRoute.shortName = "BK";
+    lrtJabodebekRoute.color = "046C37";
+    lrtJabodebekRoute.type = ModeType.Train;
+    lrtJabodebekRoute.stops = lrtJabodebekStations;
 
     const lrtJabodebek = new LrtJabodebekMode();
     lrtJabodebek.stops = lrtJabodebekStations;
@@ -143,13 +155,24 @@ export const loadRailsTransportMode: TransportModeLoader = async () => {
         const [longitude, latitude] = placemark.Point.coordinates
             .split(",")
             .map(parseFloat);
-        return new Stop(placemark.name, placemark.name, "station", {
+        const stop = new Stop();
+        stop.id = placemark.name;
+        stop.name = placemark.name;
+        stop.type = StopType.Station;
+        stop.coordinate = {
             latitude,
             longitude,
-        });
+        };
+        return stop;
     });
-    const lrtjRoute = new Route("lrtj", "LRT Jakarta", "S", "F05F21");
-    lrtjRoute.stopIds = lrtjStations.map((station) => station.id);
+
+    const lrtjRoute = new Route();
+    lrtjRoute.id = "lrtj";
+    lrtjRoute.fullName = "LRT Jakarta";
+    lrtjRoute.shortName = "S";
+    lrtjRoute.color = "F05F21";
+    lrtjRoute.type = ModeType.Train;
+    lrtjRoute.stops = lrtjStations;
 
     const lrtj = new LrtjMode();
     lrtj.stops = lrtjStations;

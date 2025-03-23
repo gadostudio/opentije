@@ -11,23 +11,23 @@ import {
     Route,
     Stop,
     TransportMode,
-    TransportModeType,
-} from "./transport-mode";
-import { Result } from "../utils/result";
-import { loadRailsTransportMode } from "./transport-source/rails";
-import { TransportModeLoader } from "./transport-source";
-import { loadTransjakartaTransportMode } from "./transport-source/transjakarta";
-import { PopOverState } from "./transport-data";
+    TransportModeDataSourceType,
+} from "../transport-mode";
+import { Result } from "../../utils/result";
+import { loadRailsTransportMode } from "../transport-source/rails";
+import { TransportModeLoader } from "../transport-source";
+import { loadTransjakartaTransportMode } from "../transport-source/transjakarta";
+import { PopOverState } from "../transport-data";
 
 type TransportController = {
-    loadingModes: Accessor<Record<TransportModeType, Result<TransportMode>>>;
+    loadingModes: Accessor<
+        Record<TransportModeDataSourceType, Result<TransportMode>>
+    >;
     modes: Accessor<Array<TransportMode>>;
     stops: Accessor<Array<Stop>>;
     routes: Accessor<Array<Route>>;
 
-    closeRightPopover: () => void;
-    rightPopover: Accessor<PopOverState>;
-    setSelectedStop: (id: string) => void;
+    getRoute: (id: string) => Route | undefined;
 };
 
 export const TransportControllerContext = createContext<TransportController>();
@@ -36,20 +36,19 @@ export const useTransportController = () =>
 
 export const TransportControllerProvider: ParentComponent = (props) => {
     const [loadingModes, setLoadingModes] = createSignal<
-        Record<TransportModeType, Result<TransportMode>>
+        Record<TransportModeDataSourceType, Result<TransportMode>>
     >({
-        Rails: {
+        [TransportModeDataSourceType.Rails]: {
             type: "loading",
         },
-        Transjakarta: {
+        [TransportModeDataSourceType.Transjakarta]: {
             type: "loading",
         },
     });
     const [modes, setModes] = createSignal<Array<TransportMode>>([]);
-    const [rightPopover, setRightPopOver] = createSignal<PopOverState>(null);
 
     const registerTransportMode = (
-        mode: TransportModeType,
+        mode: TransportModeDataSourceType,
         loader: TransportModeLoader,
     ) => {
         createEffect(async () => {
@@ -76,22 +75,14 @@ export const TransportControllerProvider: ParentComponent = (props) => {
         });
     };
 
-    registerTransportMode(TransportModeType.Rails, loadRailsTransportMode);
     registerTransportMode(
-        TransportModeType.Transjakarta,
+        TransportModeDataSourceType.Rails,
+        loadRailsTransportMode,
+    );
+    registerTransportMode(
+        TransportModeDataSourceType.Transjakarta,
         loadTransjakartaTransportMode,
     );
-
-    const setSelectedStop = (id: string) => {
-        const stop = modes()
-            .flatMap((mode) => mode.stops)
-            .find((stop) => stop.id === id);
-        if (stop === undefined) return;
-        setRightPopOver({
-            type: "stop",
-            stop,
-        });
-    };
 
     return (
         <TransportControllerContext.Provider
@@ -101,9 +92,9 @@ export const TransportControllerProvider: ParentComponent = (props) => {
                 stops: () => modes().flatMap((mode) => mode.stops),
                 routes: () =>
                     modes().flatMap((mode) => Object.values(mode.routes)),
-                closeRightPopover: () => setRightPopOver(null),
-                rightPopover,
-                setSelectedStop,
+                getRoute: (id: string) =>
+                    modes().find((mode) => mode.routes[id] !== undefined)
+                        ?.routes[id],
             }}
         >
             {props.children}
