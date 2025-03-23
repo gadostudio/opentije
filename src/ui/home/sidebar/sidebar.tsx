@@ -60,7 +60,7 @@ const Content = ({
                     class={style.searchInput}
                 />
                 <div class={style.filters}>
-                    <For each={routeTypes}>
+                    {/* <For each={routeTypes}>
                         {(routeType) => (
                             <label>
                                 <input
@@ -71,7 +71,7 @@ const Content = ({
                                 <p>{routeType}</p>
                             </label>
                         )}
-                    </For>
+                    </For> */}
                 </div>
             </div>
             <div class="sidebar__routes">
