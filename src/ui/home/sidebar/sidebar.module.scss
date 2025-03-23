@@ -6,9 +6,13 @@
     z-index: 10;
     background-color: rgb(247 250 255 / 100%);
 
-    position: fixed;
+    width: 360px;
 
-    width: 100%;
+    @media (max-width: 481px) {
+        position: fixed;
+        width: 100%;
+    }
+
     height: auto;
 
     top: 256px;

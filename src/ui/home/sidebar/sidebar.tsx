@@ -1,28 +1,27 @@
-import { Accessor, For, Match, Switch, createSignal } from "solid-js";
+import { Accessor, For, Match, Show, Switch, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
-import { Route } from "./routes";
+import { RouteItem, StopItem } from "./items";
 import style from "./sidebar.module.scss";
-import { RouteType } from "../../../data/consumer";
-import { useTransportData } from "../../../data/transport-data";
 import { AboutModal } from "./about";
-import { useSidebarState } from "../../../data/sidebar-state";
+import { useMapUiState } from "../../../data/states/sidebar-state";
+import { useTransportController } from "../../../data/states/transport-controller";
+import {
+    Route as RouteType,
+    Stop as StopType,
+} from "../../../data/transport-mode";
+import { TransjakartaRouteType } from "../../../data/transport-source/transjakarta";
 
 export const Sidebar = () => {
-    const { tjDataSource } = useTransportData();
-    const { isExpanded, setIsExpanded } = useSidebarState();
+    const {
+        isSidebarExpanded: isExpanded,
+        setIsSidebarExpanded: setIsExpanded,
+    } = useMapUiState();
 
     return (
         <div
             class={`${style.container} ${isExpanded() ? style["container-focused"] : ""}`}
         >
-            <Switch fallback={<p>Loading...</p>}>
-                <Match when={tjDataSource().type === "success"}>
-                    <Content onSearchBarFocused={() => setIsExpanded(true)} />
-                </Match>
-                <Match when={tjDataSource().type === "error"}>
-                    <p>Error</p>
-                </Match>
-            </Switch>
+            <Content onSearchBarFocused={() => setIsExpanded(true)} />
         </div>
     );
 };
@@ -32,48 +31,63 @@ const Content = ({
 }: {
     onSearchBarFocused: () => void;
 }) => {
-    const { tjDataSource, geoData, filter, setSelectedRouteTypes, setQuery } =
-        useTransportData();
-    const routeTypes = Object.values(RouteType) as Array<RouteType>;
+    const [query, setQuery] = createSignal<string>("");
+    const { stops, routes } = useTransportController();
+    const routeTypes = Object.values(
+        TransjakartaRouteType,
+    ) as Array<TransjakartaRouteType>;
     const [showAboutModal, setShowAboutModal] = createSignal<boolean>(false);
+
+    const routeSearchPredicate = function (route: RouteType): boolean {
+        return (
+            route.fullName.toLowerCase().includes(query()) ||
+            route.id.toLowerCase().includes(query())
+        );
+    };
+
+    const stopSearchPredicate = function (stop: StopType): boolean {
+        return stop.name.toLowerCase().includes(query());
+    };
 
     return (
         <>
             <div class={style.header}>
                 <input
-                    placeholder="Cari rute bus atau bus stop"
+                    placeholder="Cari rute bus, kereta, bus stop, atau stasiun"
                     onInput={(e) => setQuery(e.target.value)}
                     onFocus={() => onSearchBarFocused()}
-                    value={filter().query}
+                    value={query()}
                     class={style.searchInput}
                 />
                 <div class={style.filters}>
-                    <For each={routeTypes}>
+                    {/* <For each={routeTypes}>
                         {(routeType) => (
                             <label>
                                 <input
                                     type="checkbox"
-                                    checked={filter().selectedRouteTypes.has(
-                                        routeType,
-                                    )}
-                                    onChange={(e) => {
-                                        setSelectedRouteTypes(
-                                            routeType,
-                                            e.target.checked,
-                                        );
-                                    }}
+                                    checked={true}
+                                    onChange={(e) => {}}
                                 />
                                 <p>{routeType}</p>
                             </label>
                         )}
-                    </For>
+                    </For> */}
                 </div>
             </div>
             <div class="sidebar__routes">
                 <ul class={style.routes}>
-                    {geoData().busRoutes.map((route) => (
-                        <Route route={route} />
-                    ))}
+                    {routes()
+                        .filter(routeSearchPredicate)
+                        .map((route) => (
+                            <RouteItem route={route} />
+                        ))}
+                    <Show when={query().length !== 0}>
+                        {stops()
+                            .filter(stopSearchPredicate)
+                            .map((stop) => (
+                                <StopItem stop={stop} />
+                            ))}
+                    </Show>
                 </ul>
             </div>
             <div class="sidebar__about">
@@ -81,7 +95,7 @@ const Content = ({
                     class="about-button"
                     onClick={() => setShowAboutModal(true)}
                 >
-                    Tentang OpenTije
+                    About OpenTije
                 </button>
             </div>
             <AboutModal
