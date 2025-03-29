@@ -14,13 +14,13 @@ import { ModeType } from "../../../data/transport-mode";
 import { Feature, GeoJsonProperties, Geometry } from "geojson";
 
 export const MapCanvas: Component = () => {
-    const { modes, setSelectedStop, getRoute } = useTransportController();
+    const { modes, getRoute } = useTransportController();
     const {
         libreMap,
         setLibreMap,
         setIsSidebarExpanded,
         selectedRouteIds,
-        setSelectedRouteId,
+        setSelectedStop,
     } = useMapUiState();
     const lanesSourceId = `opentije_lanes_data`;
     const lanesLayerId = `opentije_lanes_layer`;

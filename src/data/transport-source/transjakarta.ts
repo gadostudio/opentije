@@ -172,6 +172,7 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
     }
 
     tj.routes = routes;
+    tj.clearDeadStops();
 
     return [tj];
 };
