@@ -1,13 +1,13 @@
 import { HomePage } from "../ui/home/HomePage";
-import { TransportDataProvider } from "../data/transport-data";
-import { SidebarStateProvider } from "../data/sidebar-state";
+import { MapUiStateProvider } from "../data/states/sidebar-state";
+import { TransportControllerProvider } from "../data/states/transport-controller";
 
 export default function Index() {
     return (
-        <TransportDataProvider>
-            <SidebarStateProvider>
+        <TransportControllerProvider>
+            <MapUiStateProvider>
                 <HomePage />
-            </SidebarStateProvider>
-        </TransportDataProvider>
+            </MapUiStateProvider>
+        </TransportControllerProvider>
     );
 }

@@ -1,0 +1,1442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Rail-based Public Transport Jabodetabek</name>
+    <description/>
+    <Style id="icon-1626-1A237E-nodesc-normal">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-6.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1626-1A237E-nodesc-highlight">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-6.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1626-1A237E-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1626-1A237E-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1626-1A237E-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1629-F57C00-nodesc-normal">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-7.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1629-F57C00-nodesc-highlight">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-7.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1629-F57C00-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1629-F57C00-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1629-F57C00-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1629-FBC02D-nodesc-normal">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-8.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1629-FBC02D-nodesc-highlight">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-8.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1629-FBC02D-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1629-FBC02D-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1629-FBC02D-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1716-0288D1-nodesc-normal">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-1.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1716-0288D1-nodesc-highlight">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-1.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1716-0288D1-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1716-0288D1-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1716-0288D1-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1716-795548-nodesc-normal">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-4.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1716-795548-nodesc-highlight">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-4.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1716-795548-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1716-795548-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1716-795548-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1716-7CB342-nodesc-normal">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-3.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1716-7CB342-nodesc-highlight">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-3.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1716-7CB342-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1716-7CB342-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1716-7CB342-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1716-A52714-nodesc-normal">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-2.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1716-A52714-nodesc-highlight">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-2.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1716-A52714-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1716-A52714-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1716-A52714-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1716-FF5252-nodesc-normal">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-5.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1716-FF5252-nodesc-highlight">
+      <IconStyle>
+        <scale>1</scale>
+        <Icon>
+          <href>images/icon-5.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1716-FF5252-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1716-FF5252-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1716-FF5252-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>KRL Commuter Lin Lingkar Cikarang (Jatinegara - Manggarai - Cikarang)</name>
+      <Placemark>
+        <name>Cikarang Station</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            107.145128,-6.2553325,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Metland Telaga Murni</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            107.1111767,-6.2571524,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Cibitung</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            107.0834443,-6.2615981,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tambun Station</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            107.0557856,-6.2586464,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bekasi Timur</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            107.0180666,-6.2468333,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun bekasi</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.9992061,-6.2366509,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kranji Station</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.9798459,-6.2245204,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Cakung</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.9519447,-6.218711,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>STASIUN KLENDER BARU</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.9399519,-6.2175954,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Buaran</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.9232792,-6.215484,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Klender</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.89942,-6.21333,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Jatinegara</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8703779,-6.2155411,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pondok Jati Station</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8622838,-6.2091932,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun kramat</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8565323,-6.1938115,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Gang Sentiong</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8509074,-6.1863391,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Pasar Senen</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8441705,-6.174052,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kemayoran Station</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8413931,-6.1617338,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rajawali Station</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8367063,-6.145055,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kampung Bandan Station</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8285542,-6.1325539,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Angke</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8009,-6.14473,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Duri</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8016259,-6.1560949,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Tanah Abang</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8108533,-6.1856995,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Karet Station</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.815776,-6.2008189,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>BNI City (Sudirman Baru)</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8197012,-6.2015853,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Sudirman</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8197735,-6.2015486,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Manggarai Jakarta</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8495556,-6.2101052,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Matraman Station</name>
+        <styleUrl>#icon-1716-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8605547,-6.2122779,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>KRL Commuter Lin Bogor (Jakarta Kota - Bogor/Nambo)</name>
+      <Placemark>
+        <name>Stasiun Bogor</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7903888,-6.5958193,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Cilebut</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8005634,-6.5305495,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bojong Gede Station</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7949078,-6.4932482,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Citayam</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.802323,-6.4485815,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Nambo Station</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.906257,-6.4662393,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Cibinong</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8525247,-6.4642453,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Depok</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8172041,-6.4052596,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Depok Baru Station</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.82162,-6.3911,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Pondok Cina</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8323442,-6.3689428,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Universitas Indonesia Train Station</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8317469,-6.3607311,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Universitas Pancasila Station</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8344466,-6.3388946,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Lenteng Agung</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8348042,-6.3303684,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Pasar Minggu</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8447275,-6.2836652,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Pasar Minggu Baru</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8511934,-6.2638025,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Duren Kalibata</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8550527,-6.2553166,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Cawang</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8589313,-6.242039,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Tebet</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8583391,-6.2260431,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Cikini Station</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.84124,-6.19851,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>STASIUN GONDANGDIA</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.832373,-6.1855038,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Juanda</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8303242,-6.1662388,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Sawah Besar</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8277039,-6.1604561,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Mangga Besar</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8269677,-6.1498329,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Jayakarta</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8229932,-6.1412258,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Jakarta Kota</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8147489,-6.1380895,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Manggarai Jakarta</name>
+        <styleUrl>#icon-1716-A52714-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8495556,-6.2101052,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>KRL Commuter Lin Rangkasbitung (Tanah Abang - Rangkasbitung)</name>
+      <Placemark>
+        <name>Stasiun Rangkasbitung</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.25149,-6.35268,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Citeras</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.3326823,-6.3349605,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Maja</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.3965533,-6.3323232,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Cikoya</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.41179,-6.3356,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Tigaraksa</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.4346235,-6.3284474,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Tenjo</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.4613789,-6.3273697,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Daru</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.492432,-6.338026,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Cilejit</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.5087628,-6.3539787,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Parung Panjang Station</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.5698584,-6.3441332,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Cicayur</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.6189474,-6.3295299,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Cisauk</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.6404823,-6.3246926,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Serpong</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.6655593,-6.3202143,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rawa Buntu</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.6760222,-6.3148245,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Sudimara</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7128237,-6.2969682,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Jurang Mangu</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.729575,-6.2887499,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pondok Ranji Station</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.744919,-6.2763674,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Kebayoran</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.78266,-6.23734,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Palmerah</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.79738,-6.20753,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Tanah Abang</name>
+        <styleUrl>#icon-1716-7CB342-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8108533,-6.1856995,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>KRL Commuter Lin Tangerang (Duri - Tangerang)</name>
+      <Placemark>
+        <name>Stasiun Duri</name>
+        <styleUrl>#icon-1716-795548-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8016259,-6.1560949,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Grogol Station</name>
+        <styleUrl>#icon-1716-795548-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7893663,-6.1620333,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Pesing</name>
+        <styleUrl>#icon-1716-795548-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7712794,-6.1612786,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Taman Kota</name>
+        <styleUrl>#icon-1716-795548-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7569437,-6.1592017,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bojong Indah</name>
+        <styleUrl>#icon-1716-795548-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7352378,-6.1603888,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Rawa Buaya</name>
+        <styleUrl>#icon-1716-795548-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7237058,-6.1626667,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kali Deres Station</name>
+        <styleUrl>#icon-1716-795548-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7038006,-6.1660731,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Poris</name>
+        <styleUrl>#icon-1716-795548-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.6797318,-6.1700918,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Batu Ceper</name>
+        <styleUrl>#icon-1716-795548-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.664754,-6.171887,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Tanah Tinggi</name>
+        <styleUrl>#icon-1716-795548-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.6464109,-6.1756437,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Tangerang</name>
+        <styleUrl>#icon-1716-795548-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.6328005,-6.176808,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>KRL Commuter Lin Tanjung Priok (Jakarta Kota - Tanjung Priok)</name>
+      <Placemark>
+        <name>Stasiun Jakarta Kota</name>
+        <styleUrl>#icon-1716-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8147489,-6.1380895,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kampung Bandan Station</name>
+        <styleUrl>#icon-1716-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8285542,-6.1325539,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Ancol</name>
+        <styleUrl>#icon-1716-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8451135,-6.1280046,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Tanjung Priuk</name>
+        <styleUrl>#icon-1716-FF5252-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8811835,-6.1109799,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>MRT Jakarta</name>
+      <Placemark>
+        <name>Lebak Bulus Grab</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7749906,-6.2892828,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Fatmawati MRT</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.79246,-6.29245,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Cipete Raya I</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.79749,-6.27826,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Haji Nawi</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7973327,-6.2666813,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MRT Blok A</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7971347,-6.2557533,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun MRT - Blok M</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7981,-6.24447,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>MRT Station ASEAN</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.7986087,-6.2387143,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Senayan</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8024774,-6.2267406,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Istora Mandiri</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8085887,-6.2223613,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bendungan Hilir</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.81795,-6.215,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Setiabudi Astra</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8214953,-6.2088638,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Dukuh Atas BNI</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8227961,-6.2007972,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun MRT Bundaran HI</name>
+        <styleUrl>#icon-1626-1A237E-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8228072,-6.1906083,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name><![CDATA[LRT Jabodebek (Lin Cibubur & Bekasi)]]></name>
+      <Placemark>
+        <name>Stasiun LRT Harjamukti</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.89565,-6.37393,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun LRT Ciracas</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.88662,-6.32389,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kampung Rambutan LRT Station</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.884392,-6.309419,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun LRT Taman Mini</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8806779,-6.2928669,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>LRT Station Jati Mulya</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            107.020882,-6.2636739,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun LRT Cikunir 2</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.96339,-6.25452,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun LRT Cikunir 1</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.95177,-6.25651,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>LRT Station Jatibening Baru</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.9278667,-6.2576792,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun LRT Halim</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8873925,-6.2457929,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Cawang LRT Station</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8712288,-6.2458857,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun LRT Ciliwung</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8640338,-6.2434487,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun LRT Cikoko</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8570138,-6.243474,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun LRT Pancoran Barat</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8381035,-6.2420039,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun LRT Kuningan</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.83306,-6.22863,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>JPO Stasiun LRT Rasuna Said</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8324815,-6.221729,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun LRT Setiabudi</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8302175,-6.2092939,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Dukuh Atas LRT Station</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.825652,-6.2048039,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bekasi Barat LRT Station</name>
+        <styleUrl>#icon-1629-F57C00-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.9897647,-6.2525554,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>LRT Jakarta</name>
+      <Placemark>
+        <name>Stasiun LRT Pegangsaan Dua Kelapa Gading</name>
+        <styleUrl>#icon-1629-FBC02D-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.9151905,-6.1590026,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Boulevard Utara Station</name>
+        <styleUrl>#icon-1629-FBC02D-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.906076,-6.1593193,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Boulevard Selatan</name>
+        <styleUrl>#icon-1629-FBC02D-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8999952,-6.1689905,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>LRT Pulomas Station</name>
+        <styleUrl>#icon-1629-FBC02D-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.893923,-6.1767955,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Equestrian</name>
+        <styleUrl>#icon-1629-FBC02D-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.8914566,-6.183506,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Stasiun Velodrom</name>
+        <styleUrl>#icon-1629-FBC02D-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            106.891093,-6.1927864,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
