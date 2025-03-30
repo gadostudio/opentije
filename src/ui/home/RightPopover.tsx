@@ -13,7 +13,7 @@ import {
 import style from "./RightPopover.module.scss";
 import { useTransportController } from "../../data/states/transport-controller";
 import { Stop } from "../../data/transport-mode";
-import { useMapUiState } from "../../data/states/sidebar-state";
+import { useMapUiState } from "../../data/states/map-ui";
 
 export const RightPopover: ParentComponent = () => {
     const { rightPopover } = useMapUiState();

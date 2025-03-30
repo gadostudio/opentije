@@ -4,7 +4,7 @@ import Papa from "papaparse";
 import { TransjakartaMode } from "../transport-mode/transjakarta";
 import { ModeType, Route, Stop, StopType, Trip } from "../transport-mode";
 import { DefaultMap } from "../../utils/container";
-import { BusStop, BusTrip, TripRaw } from "../transport-data";
+import { TripRaw } from "../transport-data";
 
 export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
     const response = await fetch("/assets/transport-data/file_gtfs.zip");
@@ -161,7 +161,6 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
             const stopIds = tripStopIds.get(trip.id);
             for (const stopId of stopIds) {
                 const stop = stops[stopId];
-                stop.servedRoutes.push(route);
                 routeStops.push(stop);
             }
         }
