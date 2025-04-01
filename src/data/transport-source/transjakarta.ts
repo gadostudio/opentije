@@ -148,6 +148,7 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
         route.shortName = routeRawData.route_id;
         route.color = routeRawData.route_color;
         route.type = ModeType.Bus;
+        route.labels = [ModeType.Bus, "Transjakarta", routeRawData.route_type];
 
         const routeStops: Array<Stop> = [];
 
@@ -184,6 +185,7 @@ export type RouteRawData = {
     route_desc: TransjakartaRouteType;
     route_color: string;
     route_text_color: string;
+    route_type: string;
 };
 
 export type StopRawData = {

@@ -8,8 +8,8 @@ export enum TransportModeDataSourceType {
 }
 
 export enum ModeType {
-    Bus = "bus",
-    Train = "train",
+    Bus = "Bus",
+    Train = "Train",
 }
 
 export abstract class TransportMode {
@@ -40,6 +40,7 @@ export class Route {
     stops: Array<Stop> = [];
     type: ModeType = ModeType.Bus;
     trips: Array<Trip> = [];
+    labels: Array<string> = [];
 
     get laneGeoJson(): Feature<MultiLineString> {
         const routeShapes = this.trips.map((trip) => trip.shapeCoordinates);

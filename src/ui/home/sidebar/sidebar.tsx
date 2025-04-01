@@ -1,5 +1,12 @@
-import { Accessor, For, Match, Show, Switch, createSignal } from "solid-js";
-import { createStore } from "solid-js/store";
+import {
+    Accessor,
+    For,
+    Match,
+    Setter,
+    Show,
+    Switch,
+    createSignal,
+} from "solid-js";
 import { RouteItem, StopItem } from "./items";
 import style from "./sidebar.module.scss";
 import { AboutModal } from "./about";
@@ -9,7 +16,7 @@ import {
     Route as RouteType,
     Stop as StopType,
 } from "../../../data/transport-mode";
-import { TransjakartaRouteType } from "../../../data/transport-source/transjakarta";
+import { transportCategories } from "../../../data/transport-data";
 
 export const Sidebar = () => {
     const {
@@ -26,6 +33,78 @@ export const Sidebar = () => {
     );
 };
 
+type CategoriesType = Array<string> | { [key: string]: CategoriesType };
+
+export type CategoryProps = {
+    categories: CategoriesType;
+    path?: string;
+    checks: Accessor<Record<string, boolean | undefined>>;
+    setCheckes: Setter<Record<string, boolean>>;
+};
+
+const Categories = ({
+    categories,
+    path,
+    checks,
+    setCheckes,
+}: CategoryProps) => {
+    const items = Array.isArray(categories)
+        ? categories.map((item) => [item, null] as const)
+        : Object.entries(categories);
+
+    return (
+        <ul class={style.categoryList}>
+            <For each={items}>
+                {([key, value]) => {
+                    const _path = path ? `${path}.${key}` : key;
+                    const isChecked = () => checks()[key];
+                    const [isExpanded, setIsExpanded] = createSignal(false);
+
+                    return (
+                        <li
+                            class={`${style.categoryItem} ${value ? style.categoryItemExpandable : undefined}`}
+                        >
+                            {value && (
+                                <span
+                                    class={style.arrow}
+                                    onClick={() =>
+                                        setIsExpanded((prev) => !prev)
+                                    }
+                                >
+                                    {isExpanded() ? "▼" : "▶"}
+                                </span>
+                            )}
+                            <label class={style.categoryLabel}>
+                                <input
+                                    type="checkbox"
+                                    checked={isChecked()}
+                                    onChange={(e) => {
+                                        setCheckes((prev) => ({
+                                            ...prev,
+                                            [key]: e.target.checked,
+                                        }));
+                                    }}
+                                />
+                                {key}
+                            </label>
+                            {value && isExpanded() && (
+                                <div class={style.categorySubList}>
+                                    <Categories
+                                        categories={value}
+                                        path={_path}
+                                        checks={checks}
+                                        setCheckes={setCheckes}
+                                    />
+                                </div>
+                            )}
+                        </li>
+                    );
+                }}
+            </For>
+        </ul>
+    );
+};
+
 const Content = ({
     onSearchBarFocused,
 }: {
@@ -33,10 +112,8 @@ const Content = ({
 }) => {
     const [query, setQuery] = createSignal<string>("");
     const { stops, routes } = useTransportController();
-    const routeTypes = Object.values(
-        TransjakartaRouteType,
-    ) as Array<TransjakartaRouteType>;
     const [showAboutModal, setShowAboutModal] = createSignal<boolean>(false);
+    const [checks, setChecks] = createSignal<Record<string, boolean>>({});
 
     const routeSearchPredicate = function (route: RouteType): boolean {
         return (
@@ -60,18 +137,11 @@ const Content = ({
                     class={style.searchInput}
                 />
                 <div class={style.filters}>
-                    {/* <For each={routeTypes}>
-                        {(routeType) => (
-                            <label>
-                                <input
-                                    type="checkbox"
-                                    checked={true}
-                                    onChange={(e) => {}}
-                                />
-                                <p>{routeType}</p>
-                            </label>
-                        )}
-                    </For> */}
+                    <Categories
+                        categories={transportCategories}
+                        checks={checks}
+                        setCheckes={setChecks}
+                    />
                 </div>
             </div>
             <div class="sidebar__routes">
