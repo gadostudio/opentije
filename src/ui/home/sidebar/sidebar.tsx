@@ -90,13 +90,24 @@ const Content = ({
                     </Show>
                 </ul>
             </div>
-            <div class="sidebar__about">
-                <button
-                    class="about-button"
-                    onClick={() => setShowAboutModal(true)}
-                >
-                    About OpenTije
-                </button>
+            <div class={style.footer}>
+                {/* TODO language switcher */}
+                <div></div>
+                <div class={style.footerRight}>
+                    <a
+                        href="https://github.com/gadoproject/opentije"
+                        target="_blank"
+                    >
+                        <i
+                            class={`${style.footerIcon} fa-brands fa-github`}
+                        ></i>
+                    </a>
+                    <a onClick={() => setShowAboutModal(true)}>
+                        <i
+                            class={`${style.footerIcon} fa-solid fa-circle-info`}
+                        ></i>
+                    </a>
+                </div>
             </div>
             <AboutModal
                 show={showAboutModal()}
