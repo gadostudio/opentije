@@ -3,7 +3,7 @@ import { createStore } from "solid-js/store";
 import { RouteItem, StopItem } from "./items";
 import style from "./sidebar.module.scss";
 import { AboutModal } from "./about";
-import { useMapUiState } from "../../../data/states/sidebar-state";
+import { useMapUiState } from "../../../data/states/map-ui";
 import { useTransportController } from "../../../data/states/transport-controller";
 import {
     Route as RouteType,
