@@ -17,7 +17,6 @@ import { Result } from "../../utils/result";
 import { loadRailsTransportMode } from "../transport-source/rails";
 import { TransportModeLoader } from "../transport-source";
 import { loadTransjakartaTransportMode } from "../transport-source/transjakarta";
-import { PopOverState } from "../transport-data";
 
 type TransportController = {
     loadingModes: Accessor<
@@ -56,6 +55,9 @@ export const TransportControllerProvider: ParentComponent = (props) => {
             let newModes: Array<TransportMode> = [];
             try {
                 newModes = await loader();
+                for (const mode of newModes) {
+                    mode.init();
+                }
                 result = {
                     type: "success",
                     data: undefined,

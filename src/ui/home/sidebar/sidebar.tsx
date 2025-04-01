@@ -3,7 +3,7 @@ import { createStore } from "solid-js/store";
 import { RouteItem, StopItem } from "./items";
 import style from "./sidebar.module.scss";
 import { AboutModal } from "./about";
-import { useMapUiState } from "../../../data/states/sidebar-state";
+import { useMapUiState } from "../../../data/states/map-ui";
 import { useTransportController } from "../../../data/states/transport-controller";
 import {
     Route as RouteType,
@@ -90,13 +90,24 @@ const Content = ({
                     </Show>
                 </ul>
             </div>
-            <div class="sidebar__about">
-                <button
-                    class="about-button"
-                    onClick={() => setShowAboutModal(true)}
-                >
-                    About OpenTije
-                </button>
+            <div class={style.footer}>
+                {/* TODO language switcher */}
+                <div></div>
+                <div class={style.footerRight}>
+                    <a
+                        href="https://github.com/gadoproject/opentije"
+                        target="_blank"
+                    >
+                        <i
+                            class={`${style.footerIcon} fa-brands fa-github`}
+                        ></i>
+                    </a>
+                    <a onClick={() => setShowAboutModal(true)}>
+                        <i
+                            class={`${style.footerIcon} fa-solid fa-circle-info`}
+                        ></i>
+                    </a>
+                </div>
             </div>
             <AboutModal
                 show={showAboutModal()}
