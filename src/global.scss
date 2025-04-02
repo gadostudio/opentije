@@ -21,7 +21,7 @@ body {
 
     &__canvas-container {
         position: relative;
-        width: 100%;
+        flex: 1;
     }
 }
 
@@ -29,23 +29,5 @@ body {
     &__routes {
         overflow-y: scroll;
         height: 100%;
-    }
-
-    &__about {
-        border-top: #00000040 1px solid;
-        padding: 16px 8px;
-        display: flex;
-        flex-direction: column;
-
-        .about-button {
-            color: black;
-            border: none;
-            background: none;
-            text-align: start;
-            cursor: pointer;
-            text-decoration: underline;
-            font-weight: bold;
-            display: inline;
-        }
     }
 }
