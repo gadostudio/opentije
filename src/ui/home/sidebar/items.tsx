@@ -5,7 +5,7 @@ import {
 } from "../../../data/transport-mode";
 import style from "./routes.module.scss";
 import { useTransportController } from "../../../data/states/transport-controller";
-import { useMapUiState } from "../../../data/states/sidebar-state";
+import { useMapUiState } from "../../../data/states/map-ui";
 
 type RouteProps = {
     route: RouteType;

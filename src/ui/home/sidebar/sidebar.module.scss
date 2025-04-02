@@ -112,3 +112,38 @@
 .categoryItem {
     list-style-type: none;
 }
+
+// Footer
+.footer {
+    border-top: #00000040 1px solid;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.footerAboutButton {
+    color: black;
+    border: none;
+    background: none;
+    text-align: start;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: bold;
+    display: inline;
+}
+
+.footerRight {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    
+    i {
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        object-fit: cover;
+        filter: grayscale(100%);
+    }
+}
