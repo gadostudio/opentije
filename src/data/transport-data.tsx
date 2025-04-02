@@ -1,17 +1,24 @@
-import {
-    Accessor,
-    createContext,
-    createEffect,
-    createSignal,
-    onMount,
-    ParentComponent,
-    useContext,
-} from "solid-js";
 import { Point, Feature, MultiLineString, Position } from "geojson";
-import { Result } from "../utils/result";
-import { RouteRawData, TransjakartaRouteType, ShapeRawData } from "./consumer";
-import { DefaultMap } from "../utils/container";
-import { Stop } from "./transport-mode";
+import {
+    RouteRawData,
+    TransjakartaRouteType,
+    ShapeRawData,
+} from "./transport-source/transjakarta";
+import { ModeType, Stop } from "./transport-mode";
+
+export const busCategories = {
+    Transjakarta: Object.values(TransjakartaRouteType),
+};
+export const trainCategories = [
+    "Commuterline",
+    "LRT Jakarta",
+    "MRT Jakarta",
+    "LRT Jabodebek",
+];
+export const transportCategories = {
+    [ModeType.Bus]: busCategories,
+    [ModeType.Train]: trainCategories,
+};
 
 export type TripRaw = {
     tripId: string;

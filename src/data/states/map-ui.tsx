@@ -45,6 +45,7 @@ export const MapUiStateProvider: ParentComponent = (props) => {
     const [selectedRouteIds, setSelectedRouteIds] = createSignal<Set<string>>(
         new Set(),
     );
+    const [keywordFilter, setKeywordFilter] = createSignal<Array<string>>([]);
     const [libreMap, setLibreMap] = createSignal<Map | null>(null);
     const [rightPopover, setRightPopOver] = createSignal<PopOverState>(null);
 

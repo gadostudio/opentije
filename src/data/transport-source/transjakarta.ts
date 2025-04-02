@@ -152,6 +152,7 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
         route.shortName = routeRawData.route_id;
         route.color = routeRawData.route_color;
         route.type = ModeType.Bus;
+        route.label = routeRawData.route_desc;
 
         const routeStops: Array<Stop> = [];
 
@@ -161,7 +162,7 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
             if (tripRaw.tripId.match(/^[0-9]{1,2}\-P[0-9]+/)) {
                 continue;
             }
-            
+
             const trip = new Trip();
             trip.id = tripRaw.tripId;
             trip.shapes = tripRaw.shapes;
@@ -192,6 +193,7 @@ export type RouteRawData = {
     route_desc: TransjakartaRouteType;
     route_color: string;
     route_text_color: string;
+    route_type: string;
 };
 
 export type StopRawData = {
