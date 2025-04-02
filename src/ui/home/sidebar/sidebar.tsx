@@ -1,10 +1,4 @@
-import {
-    Accessor,
-    For,
-    Setter,
-    Show,
-    createSignal,
-} from "solid-js";
+import { Accessor, For, Setter, Show, createSignal } from "solid-js";
 import { RouteItem, StopItem } from "./items";
 import style from "./sidebar.module.scss";
 import { AboutModal } from "./about";
@@ -43,7 +37,7 @@ export type CategoryProps = {
 
 const getAllChildPaths = (
     categories: CategoriesType,
-    prefix: string = ''
+    prefix: string = "",
 ): string[] => {
     const paths: string[] = [];
 
@@ -63,7 +57,7 @@ const getAllChildPaths = (
 // Helper function to check if all children are checked
 const areAllChildrenChecked = (
     childPaths: string[],
-    checks: CategoriesToggle
+    checks: CategoriesToggle,
 ): boolean => {
     return childPaths.every((path) => checks[path]);
 };
@@ -71,17 +65,12 @@ const areAllChildrenChecked = (
 // Helper function to check if any child is unchecked
 const isAnyChildUnchecked = (
     childPaths: string[],
-    checks: CategoriesToggle
+    checks: CategoriesToggle,
 ): boolean => {
     return childPaths.some((path) => !checks[path]);
 };
 
-const Categories = ({
-    categories,
-    path,
-    checks,
-    setChecks,
-}: CategoryProps) => {
+const Categories = ({ categories, path, checks, setChecks }: CategoryProps) => {
     const items = Array.isArray(categories)
         ? categories.map((item) => [item, null] as const)
         : Object.entries(categories);
@@ -93,7 +82,9 @@ const Categories = ({
                     const _path = path ? `${path}.${key}` : key;
                     const isChecked = () => !!checks()[_path];
                     const [isExpanded, setIsExpanded] = createSignal(false);
-                    const childPaths = value ? getAllChildPaths(value, _path) : [];
+                    const childPaths = value
+                        ? getAllChildPaths(value, _path)
+                        : [];
 
                     const handleCheckboxChange = (checked: boolean) => {
                         setChecks((prev) => {
@@ -108,16 +99,34 @@ const Categories = ({
 
                             // Update parent paths (upward propagation)
                             let currentPath = _path;
-                            while (currentPath.includes('.')) {
-                                const parentPath = currentPath.substring(0, currentPath.lastIndexOf('.'));
+                            while (currentPath.includes(".")) {
+                                const parentPath = currentPath.substring(
+                                    0,
+                                    currentPath.lastIndexOf("."),
+                                );
                                 const parentChildPaths = getAllChildPaths(
                                     categories,
-                                    parentPath
-                                ).filter((p) => p !== parentPath && p.startsWith(parentPath));
+                                    parentPath,
+                                ).filter(
+                                    (p) =>
+                                        p !== parentPath &&
+                                        p.startsWith(parentPath),
+                                );
 
-                                if (checked && areAllChildrenChecked(parentChildPaths, newChecks)) {
+                                if (
+                                    checked &&
+                                    areAllChildrenChecked(
+                                        parentChildPaths,
+                                        newChecks,
+                                    )
+                                ) {
                                     newChecks[parentPath] = true;
-                                } else if (isAnyChildUnchecked(parentChildPaths, newChecks)) {
+                                } else if (
+                                    isAnyChildUnchecked(
+                                        parentChildPaths,
+                                        newChecks,
+                                    )
+                                ) {
                                     newChecks[parentPath] = false;
                                 }
 
@@ -135,7 +144,9 @@ const Categories = ({
                             {value && (
                                 <span
                                     class={style.arrow}
-                                    onClick={() => setIsExpanded((prev) => !prev)}
+                                    onClick={() =>
+                                        setIsExpanded((prev) => !prev)
+                                    }
                                 >
                                     {isExpanded() ? "▼" : "▶"}
                                 </span>
@@ -144,7 +155,9 @@ const Categories = ({
                                 <input
                                     type="checkbox"
                                     checked={isChecked()}
-                                    onChange={(e) => handleCheckboxChange(e.target.checked)}
+                                    onChange={(e) =>
+                                        handleCheckboxChange(e.target.checked)
+                                    }
                                 />
                                 {key}
                             </label>
@@ -177,7 +190,9 @@ const Content = ({
     const [query, setQuery] = createSignal<string>("");
     const { stops, routes } = useTransportController();
     const [showAboutModal, setShowAboutModal] = createSignal<boolean>(false);
-    const [checks, setChecks] = createSignal<CategoriesToggle>(createChecksFilter(transportCategories));
+    const [checks, setChecks] = createSignal<CategoriesToggle>(
+        createChecksFilter(transportCategories),
+    );
 
     const filter = (route: RouteType): boolean => {
         const activeKeys = Object.entries(checks())
@@ -187,7 +202,11 @@ const Content = ({
                 return lastSegment;
             });
         const activeKeywords = new Set(activeKeys);
-        const routeKeywords = new Set([route.type, route.mode.name, route.label]);
+        const routeKeywords = new Set([
+            route.type,
+            route.mode.name,
+            route.label,
+        ]);
 
         if (activeKeywords.intersection(routeKeywords).size === 0) {
             return false;
@@ -239,7 +258,10 @@ const Content = ({
             <div class={style.footer}>
                 <div></div>
                 <div class={style.footerRight}>
-                    <a href="https://github.com/gadoproject/opentije" target="_blank">
+                    <a
+                        href="https://github.com/gadoproject/opentije"
+                        target="_blank"
+                    >
                         <i class={`fa-brands fa-github`}></i>
                     </a>
                     <a onClick={() => setShowAboutModal(true)}>

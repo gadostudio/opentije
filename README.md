@@ -2,30 +2,30 @@
 
 [Website](https://opentije.pages.dev/)
 
-Open Tije stands for *Open Transportasi Jabodetabek*.
+Open Tije stands for _Open Transportasi Jabodetabek_.
 
 Discover bus stops, transit hubs, and train stations across the Jabodetabek metropolitan area through interactive maps. The goal is to liberate public transportation data and simplify access for everyone by consolidating information from various transport providers—currently scattered across separate apps—into one platform.
 
 ## ✨ Features
 
 - [x] Transjakarta
-  - [x] Visualization of bus stops
-  - [x] Visualization of bus routes
-  - [x] Real-time bus tracking
+    - [x] Visualization of bus stops
+    - [x] Visualization of bus routes
+    - [x] Real-time bus tracking
 - [ ] MRTJ
-  - [x] Stations
+    - [x] Stations
 - [ ] LRTJ
-  - [x] Stations
+    - [x] Stations
 - [ ] LRT Jabodebek
-  - [x] Stations
+    - [x] Stations
 - [ ] Commuterline
-  - [ ] Stations
+    - [ ] Stations
 - [ ] Transpatriot
-  - [ ] Bus stops
+    - [ ] Bus stops
 - [ ] Trans Wibawa Mukti
-  - [ ] Bus stops
+    - [ ] Bus stops
 - [ ] Transpakuan
-  - [ ] Bus stops
+    - [ ] Bus stops
 
 ## 💭 Feedback and Inquiries
 

@@ -162,7 +162,7 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
             if (tripRaw.tripId.match(/^[0-9]{1,2}\-P[0-9]+/)) {
                 continue;
             }
-            
+
             const trip = new Trip();
             trip.id = tripRaw.tripId;
             trip.shapes = tripRaw.shapes;
