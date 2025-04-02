@@ -14,6 +14,18 @@ import { jakartaCoordinate } from "../../../constants";
 import { useTransportController } from "../../../data/states/transport-controller";
 import { useMapUiState } from "../../../data/states/map-ui";
 import { ModeType } from "../../../data/transport-mode";
+import { useTjRealtimePositions } from "../../hooks/tj/realtime";
+import { installRealtimeBusLocation } from "./map-plugins";
+import { TjRealtimeConnectionControl } from "./tj-realtime-control";
+
+export enum MapLayer {
+    BusPositions = "opentije_bus_position",
+    BusPositionsLayer = "opentije_bus_position_layer",
+}
+
+export enum MapDataSource {
+    BusPositions = "opentije_bus_position",
+}
 
 export const MapCanvas: Component = () => {
     const { modes } = useTransportController();
@@ -24,6 +36,9 @@ export const MapCanvas: Component = () => {
         selectedRouteIds,
         setSelectedStop,
     } = useMapUiState();
+    const { busPositions, connStatus } = useTjRealtimePositions();
+
+    installRealtimeBusLocation(busPositions, libreMap);
 
     createEffect(() => {
         const map = libreMap();
@@ -172,6 +187,7 @@ export const MapCanvas: Component = () => {
             attributionControl: false,
         });
         map.on("load", async () => {
+            map.addControl(new TjRealtimeConnectionControl(connStatus));
             map.addControl(
                 new GeolocateControl({
                     positionOptions: {
@@ -205,14 +221,6 @@ export const MapCanvas: Component = () => {
             id="map"
             class="map__canvas"
             onClick={() => setIsSidebarExpanded(false)}
-        >
-            <ul class={""}>
-                <li>
-                    {1}, {1}
-                </li>
-                <li>Public transportation around here</li>
-                <li>Open Google Maps</li>
-            </ul>
-        </div>
+        />
     );
 };
