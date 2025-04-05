@@ -21,14 +21,14 @@ export const installRealtimeBusLocation = (
         if (map === null) return;
 
         if (!map.getSource(MapDataSource.BusPositions)) {
-        map.addSource(MapDataSource.BusPositions, {
-            type: "geojson",
-            data: {
-                type: "FeatureCollection",
-                features: [],
-            },
-        });
-    }
+            map.addSource(MapDataSource.BusPositions, {
+                type: "geojson",
+                data: {
+                    type: "FeatureCollection",
+                    features: [],
+                },
+            });
+        }
         if (!map.getLayer(MapLayer.BusPositions)) {
             map.addLayer({
                 id: MapLayer.BusPositions,

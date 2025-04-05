@@ -4,8 +4,11 @@ import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
 import "./global.scss";
+import { useGoogleAnalytics } from "./ui/hooks/useGoogleAnalytics";
 
 const App: Component = () => {
+    useGoogleAnalytics();
+
     return (
         <Router
             root={(props) => (
