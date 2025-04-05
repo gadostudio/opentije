@@ -4,31 +4,33 @@ import { useLocation } from "@solidjs/router";
 import { createEffect, onMount } from "solid-js";
 
 export const useGoogleAnalytics = () => {
+    function gtag() {
+        if (!window.dataLayer) {
+            window.dataLayer = [];
+        }
+        window.dataLayer.push(arguments);
+    }
+
     // Initialize GA4 script on mount (client-side only)
     onMount(() => {
-        if (typeof window !== "undefined") {
-            const script1 = document.createElement("script");
-            script1.async = true;
-            script1.src =
-                "https://www.googletagmanager.com/gtag/js?id=G-K4V5W7HYZE";
-            document.head.appendChild(script1);
-        }
+        if (window === undefined) return;
+
+        const script = document.createElement("script");
+        script.async = true;
+        script.src = "https://www.googletagmanager.com/gtag/js?id=G-K4V5W7HYZE";
+        document.head.appendChild(script);
+
+        gtag("js", new Date());
+        gtag("config", "G-K4V5W7HYZE");
     });
 
     // Track page views on route changes
     const location = useLocation();
     createEffect(() => {
-        if (typeof window !== "undefined") {
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag("js", new Date());
-            gtag("config", "G-K4V5W7HYZE");
+        if (window === undefined) return;
 
-            window.gtag("config", "G-K4V5W7HYZE", {
-                page_path: location.pathname + location.search,
-            });
-        }
+        gtag("config", "G-K4V5W7HYZE", {
+            page_path: location.pathname + location.search,
+        });
     });
 };
