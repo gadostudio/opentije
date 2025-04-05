@@ -8,8 +8,8 @@ export enum TransportModeDataSourceType {
 }
 
 export enum ModeType {
-    Bus = "bus",
-    Train = "train",
+    Bus = "Bus",
+    Train = "Train",
 }
 
 export abstract class TransportMode {
@@ -18,11 +18,35 @@ export abstract class TransportMode {
 
     stops: Array<Stop> = [];
     routes: Record<string, Route> = {};
+
+    get stopsSourceId() {
+        return `source:stops:${this.name}`;
+    }
+    get routesSourceId() {
+        return `source:routes:${this.name}`;
+    }
+    get stopsLayerId() {
+        return `source:stops:${this.name}`;
+    }
+    get routesLayerId() {
+        return `source:routes:${this.name}`;
+    }
+
+    init() {
+        for (const route of Object.values(this.routes)) {
+            route.mode = this;
+
+            for (const stop of route.stops) {
+                stop.servedRoutes.push(route);
+            }
+        }
+    }
 }
 
 export class Trip {
     id: string = "";
     shapes: Array<ShapeRawData> = [];
+    stops: Array<Stop> = [];
 
     get shapeCoordinates(): Array<Position> {
         return this.shapes.map((shape) => [
@@ -33,6 +57,7 @@ export class Trip {
 }
 
 export class Route {
+    mode!: TransportMode;
     fullName: string = "";
     color: string = "";
     id: string = "";
@@ -40,8 +65,10 @@ export class Route {
     stops: Array<Stop> = [];
     type: ModeType = ModeType.Bus;
     trips: Array<Trip> = [];
+    // Hacks for filtering
+    label: string = "";
 
-    get laneGeoJson(): Feature<MultiLineString> {
+    get geoJson(): Feature<MultiLineString> {
         const routeShapes = this.trips.map((trip) => trip.shapeCoordinates);
         return {
             type: "Feature",
@@ -52,6 +79,7 @@ export class Route {
             properties: {
                 name: this.fullName,
                 color: `#${this.color}`,
+                routeId: this.id,
             },
         };
     }
@@ -78,6 +106,7 @@ export class Stop {
                 name: this.name,
                 type: this.type,
                 color: "#000000",
+                servedRouteIds: this.servedRoutes.map((route) => route.id),
             },
             geometry: {
                 type: "Point",

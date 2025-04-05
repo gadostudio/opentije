@@ -4,7 +4,7 @@ import Papa from "papaparse";
 import { TransjakartaMode } from "../transport-mode/transjakarta";
 import { ModeType, Route, Stop, StopType, Trip } from "../transport-mode";
 import { DefaultMap } from "../../utils/container";
-import { BusStop, BusTrip, TripRaw } from "../transport-data";
+import { TripRaw } from "../transport-data";
 
 export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
     const response = await fetch("/assets/transport-data/file_gtfs.zip");
@@ -130,6 +130,10 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
         () => new Set(),
     );
     for (const stopTime of stopTimesRawData) {
+        // Skip "pengalihan" route
+        if (stopTime.trip_id.match(/^[0-9]{1,2}\-P[0-9]+/)) {
+            continue;
+        }
         tripStopIds.get(stopTime.trip_id).add(stopTime.stop_id);
         routesServedByStop
             .get(stopTime.stop_id)
@@ -143,27 +147,34 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
         }
 
         const route = new Route();
-        (route.id = routeRawData.route_id),
-            (route.fullName = routeRawData.route_long_name);
+        route.id = routeRawData.route_id;
+        route.fullName = routeRawData.route_long_name;
         route.shortName = routeRawData.route_id;
         route.color = routeRawData.route_color;
         route.type = ModeType.Bus;
+        route.label = routeRawData.route_desc;
 
         const routeStops: Array<Stop> = [];
 
         const trips: Array<Trip> = [];
         for (const tripRaw of tripsRaw.get(routeRawData.route_id)) {
+            // Skip "pengalihan" route
+            if (tripRaw.tripId.match(/^[0-9]{1,2}\-P[0-9]+/)) {
+                continue;
+            }
+
             const trip = new Trip();
             trip.id = tripRaw.tripId;
             trip.shapes = tripRaw.shapes;
-            trips.push(trip);
 
             const stopIds = tripStopIds.get(trip.id);
             for (const stopId of stopIds) {
                 const stop = stops[stopId];
-                stop.servedRoutes.push(route);
+                trip.stops.push(stop);
                 routeStops.push(stop);
             }
+
+            trips.push(trip);
         }
         route.stops = routeStops;
         route.trips = trips;
@@ -184,6 +195,7 @@ export type RouteRawData = {
     route_desc: TransjakartaRouteType;
     route_color: string;
     route_text_color: string;
+    route_type: string;
 };
 
 export type StopRawData = {

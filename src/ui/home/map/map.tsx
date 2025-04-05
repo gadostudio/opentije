@@ -1,6 +1,9 @@
 import { Component, createEffect, createSignal, onMount } from "solid-js";
 import {
     CanvasSourceSpecification,
+    ExpressionInputType,
+    ExpressionSpecification,
+    FilterSpecification,
     GeoJSONSource,
     GeolocateControl,
     Map,
@@ -9,67 +12,90 @@ import {
 } from "maplibre-gl";
 import { jakartaCoordinate } from "../../../constants";
 import { useTransportController } from "../../../data/states/transport-controller";
-import { useMapUiState } from "../../../data/states/sidebar-state";
+import { useMapUiState } from "../../../data/states/map-ui";
 import { ModeType } from "../../../data/transport-mode";
-import { Feature, GeoJsonProperties, Geometry } from "geojson";
+import { useTjRealtimePositions } from "../../hooks/tj/realtime";
+import { installRealtimeBusLocation } from "./map-plugins";
+import { TjRealtimeConnectionControl } from "./tj-realtime-control";
+
+export enum MapLayer {
+    BusPositions = "opentije_bus_position",
+    BusPositionsLayer = "opentije_bus_position_layer",
+}
+
+export enum MapDataSource {
+    BusPositions = "opentije_bus_position",
+}
 
 export const MapCanvas: Component = () => {
-    const { modes, getRoute } = useTransportController();
+    const { modes } = useTransportController();
     const {
         libreMap,
         setLibreMap,
         setIsSidebarExpanded,
         selectedRouteIds,
-        setSelectedRouteId,
         setSelectedStop,
     } = useMapUiState();
-    const lanesSourceId = `opentije_lanes_data`;
-    const lanesLayerId = `opentije_lanes_layer`;
+    const { busPositions, connStatus } = useTjRealtimePositions();
+
+    installRealtimeBusLocation(busPositions, libreMap);
 
     createEffect(() => {
         const map = libreMap();
-        if (map === null) return;
-
-        const features: Array<Feature<Geometry, GeoJsonProperties>> = [];
-        for (const routeId of selectedRouteIds()) {
-            const geoJson = getRoute(routeId)?.laneGeoJson;
-            if (geoJson === undefined) continue;
-            features.push(geoJson);
-        }
-
-        const source = map.getSource(lanesSourceId) as
-            | GeoJSONSource
-            | undefined;
-        source?.setData({
-            type: "FeatureCollection",
-            features,
-        });
-    });
-
-    createEffect(() => {
-        const map = libreMap();
-        if (map === null) return;
+        if (!map) return;
 
         for (const mode of modes()) {
-            const sourceId = `opentije_${mode.name}_stop_data`;
-            const layerId = `opentije_${mode.name}_stop_layer`;
-
-            const stopGeoJson: GeoJSON.GeoJSON = {
-                type: "FeatureCollection",
-                features: mode.stops.map((stop) => stop.geoJson),
-            };
-            const stopSource = map.getSource(sourceId) as
+            // Routes
+            const routes = Object.values(mode.routes);
+            const routeData = routes.map((route) => route.geoJson);
+            const routeSource = map.getSource(mode.routesSourceId) as
                 | GeoJSONSource
                 | undefined;
-            if (stopSource !== undefined) {
+            const routeGeoJson: GeoJSON.GeoJSON = {
+                type: "FeatureCollection",
+                features: routeData,
+            };
+            if (routeSource) {
+                routeSource.setData(routeGeoJson);
+            } else {
+                map.addSource(mode.routesSourceId, {
+                    type: "geojson",
+                    data: routeGeoJson,
+                });
+            }
+
+            if (map.getLayer(mode.routesLayerId) === undefined) {
+                map.addLayer({
+                    id: mode.routesLayerId,
+                    type: "line",
+                    source: mode.routesSourceId,
+                    paint: {
+                        "line-width": 3,
+                        "line-color": ["get", "color"],
+                    },
+                    filter: ["literal", false],
+                });
+            }
+
+            // Stops
+            const stopData = mode.stops.map((stop) => stop.geoJson);
+            const stopSource = map.getSource(mode.stopsLayerId) as
+                | GeoJSONSource
+                | undefined;
+            const stopGeoJson: GeoJSON.GeoJSON = {
+                type: "FeatureCollection",
+                features: stopData,
+            };
+            if (stopSource) {
                 stopSource.setData(stopGeoJson);
             } else {
-                map.addSource(sourceId, {
+                map.addSource(mode.stopsLayerId, {
                     type: "geojson",
                     data: stopGeoJson,
                 });
             }
-            if (map.getLayer(layerId) !== null) {
+
+            if (map.getLayer(mode.stopsLayerId) === undefined) {
                 let image: string;
                 let minzoom: number;
                 if (mode.type === ModeType.Train) {
@@ -80,22 +106,75 @@ export const MapCanvas: Component = () => {
                     minzoom = 14;
                 }
                 map.addLayer({
-                    id: layerId,
+                    id: mode.stopsLayerId,
                     type: "symbol",
-                    source: sourceId,
+                    source: mode.stopsSourceId,
                     layout: {
                         "icon-image": image,
                         "icon-size": 0.5,
                         "icon-allow-overlap": true,
                     },
                     minzoom,
+                    paint: {
+                        "icon-color": "#FF0000",
+                    },
                 });
-                map.on("click", layerId, (target) => {
-                    const busStopId = target?.features?.[0]?.properties?.id;
-                    if (busStopId === undefined) return;
-                    setSelectedStop(busStopId);
+                map.on("click", mode.stopsLayerId, (target) => {
+                    const stopId = target?.features?.[0]?.properties?.id;
+                    if (stopId === undefined) return;
+                    setSelectedStop(stopId);
                 });
             }
+        }
+    });
+
+    createEffect(() => {
+        const map = libreMap();
+        if (!map) return;
+
+        const routeIds = Array.from(selectedRouteIds());
+        const showAll = routeIds.length === 0;
+
+        for (const mode of modes()) {
+            const layer = map.getLayer(mode.stopsLayerId);
+            if (!layer) continue;
+
+            let filter: undefined | FilterSpecification;
+            // Hide bus stops since it looks messy for a route preview
+            if (!showAll) {
+                const routeExp: Array<ExpressionSpecification> = routeIds.map(
+                    (routeId: string) => [
+                        "in",
+                        routeId,
+                        ["get", "servedRouteIds"],
+                    ],
+                );
+                filter = ["any", ...routeExp];
+                layer.minzoom = 0;
+                layer.setPaintProperty("icon-color", ["literal", "#B7B1F2"]);
+            } else {
+                filter = undefined;
+                if (mode.type === ModeType.Train) {
+                    layer.minzoom = 0;
+                } else {
+                    layer.minzoom = 14;
+                }
+                layer.setPaintProperty("icon-color", ["literal", "#000000"]);
+            }
+            map.setFilter(mode.stopsLayerId, filter);
+        }
+
+        for (const mode of modes()) {
+            const layer = map.getLayer(mode.routesLayerId);
+            if (!layer) continue;
+
+            let filter: undefined | FilterSpecification;
+            if (!showAll) {
+                filter = ["in", ["get", "routeId"], ["literal", routeIds]];
+            } else {
+                filter = ["literal", false];
+            }
+            map.setFilter(mode.routesLayerId, filter);
         }
     });
 
@@ -108,6 +187,7 @@ export const MapCanvas: Component = () => {
             attributionControl: false,
         });
         map.on("load", async () => {
+            map.addControl(new TjRealtimeConnectionControl(connStatus));
             map.addControl(
                 new GeolocateControl({
                     positionOptions: {
@@ -132,23 +212,6 @@ export const MapCanvas: Component = () => {
                 console.log("target", target.lngLat);
             });
 
-            map.addSource(lanesSourceId, {
-                type: "geojson",
-                data: {
-                    type: "FeatureCollection",
-                    features: [],
-                },
-            });
-            map.addLayer({
-                id: lanesLayerId,
-                type: "line",
-                source: lanesSourceId,
-                paint: {
-                    "line-width": 3,
-                    "line-color": ["get", "color"],
-                },
-            });
-
             setLibreMap(map);
         });
     });
@@ -158,14 +221,6 @@ export const MapCanvas: Component = () => {
             id="map"
             class="map__canvas"
             onClick={() => setIsSidebarExpanded(false)}
-        >
-            <ul class={""}>
-                <li>
-                    {1}, {1}
-                </li>
-                <li>Public transportation around here</li>
-                <li>Open Google Maps</li>
-            </ul>
-        </div>
+        />
     );
 };

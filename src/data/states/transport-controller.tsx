@@ -4,6 +4,7 @@ import {
     createEffect,
     createSignal,
     JSX,
+    onMount,
     ParentComponent,
     Setter,
     useContext,
@@ -18,7 +19,6 @@ import { Result } from "../../utils/result";
 import { loadRailsTransportMode } from "../transport-source/rails";
 import { TransportModeLoader } from "../transport-source";
 import { loadTransjakartaTransportMode } from "../transport-source/transjakarta";
-import { PopOverState } from "../transport-data";
 
 type TransportController = {
     loadingModes: Accessor<
@@ -45,7 +45,9 @@ export type TransportControllerProviderProps = {
     children: JSX.Element;
 };
 
-export const TransportControllerProvider = (props: TransportControllerProviderProps) => {
+export const TransportControllerProvider = (
+    props: TransportControllerProviderProps,
+) => {
     const [loadingModes, setLoadingModes] = createSignal<
         Record<TransportModeDataSourceType, Result<TransportMode>>
     >({
@@ -84,7 +86,7 @@ export const TransportControllerProvider = (props: TransportControllerProviderPr
         setModes((prev) => [...prev, ...newModes]);
     }
 
-    createEffect(() => {
+    onMount(() => {
         props.register.forEach(({ mode, loader }) =>
             registerTransportMode(mode, loader),
         );
