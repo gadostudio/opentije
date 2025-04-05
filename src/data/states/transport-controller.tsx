@@ -3,6 +3,8 @@ import {
     createContext,
     createEffect,
     createSignal,
+    JSX,
+    onMount,
     ParentComponent,
     Setter,
     useContext,
@@ -33,7 +35,19 @@ export const TransportControllerContext = createContext<TransportController>();
 export const useTransportController = () =>
     useContext(TransportControllerContext)!;
 
-export const TransportControllerProvider: ParentComponent = (props) => {
+export type TransportControllerRegister = {
+    loader: TransportModeLoader;
+    mode: TransportModeDataSourceType;
+};
+
+export type TransportControllerProviderProps = {
+    register: Array<TransportControllerRegister>;
+    children: JSX.Element;
+};
+
+export const TransportControllerProvider = (
+    props: TransportControllerProviderProps,
+) => {
     const [loadingModes, setLoadingModes] = createSignal<
         Record<TransportModeDataSourceType, Result<TransportMode>>
     >({
@@ -46,45 +60,37 @@ export const TransportControllerProvider: ParentComponent = (props) => {
     });
     const [modes, setModes] = createSignal<Array<TransportMode>>([]);
 
-    const registerTransportMode = (
+    async function registerTransportMode(
         mode: TransportModeDataSourceType,
         loader: TransportModeLoader,
-    ) => {
-        createEffect(async () => {
-            let result: Result<undefined>;
-            let newModes: Array<TransportMode> = [];
-            try {
-                newModes = await loader();
-                for (const mode of newModes) {
-                    mode.init();
-                }
-                result = {
-                    type: "success",
-                    data: undefined,
-                };
-            } catch (error) {
-                result = {
-                    type: "error",
-                    error,
-                };
-            }
+    ) {
+        let result: Result<undefined>;
+        let newModes: Array<TransportMode> = [];
+        try {
+            newModes = await loader();
+            result = {
+                type: "success",
+                data: undefined,
+            };
+        } catch (error) {
+            result = {
+                type: "error",
+                error,
+            };
+        }
 
-            setLoadingModes((prev) => ({
-                ...prev,
-                [mode]: result,
-            }));
-            setModes((prev) => [...prev, ...newModes]);
-        });
-    };
+        setLoadingModes((prev) => ({
+            ...prev,
+            [mode]: result,
+        }));
+        setModes((prev) => [...prev, ...newModes]);
+    }
 
-    registerTransportMode(
-        TransportModeDataSourceType.Rails,
-        loadRailsTransportMode,
-    );
-    registerTransportMode(
-        TransportModeDataSourceType.Transjakarta,
-        loadTransjakartaTransportMode,
-    );
+    onMount(() => {
+        props.register.forEach(({ mode, loader }) =>
+            registerTransportMode(mode, loader),
+        );
+    });
 
     return (
         <TransportControllerContext.Provider

@@ -166,13 +166,15 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
             const trip = new Trip();
             trip.id = tripRaw.tripId;
             trip.shapes = tripRaw.shapes;
-            trips.push(trip);
 
             const stopIds = tripStopIds.get(trip.id);
             for (const stopId of stopIds) {
                 const stop = stops[stopId];
+                trip.stops.push(stop);
                 routeStops.push(stop);
             }
+
+            trips.push(trip);
         }
         route.stops = routeStops;
         route.trips = trips;

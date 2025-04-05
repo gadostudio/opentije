@@ -46,6 +46,7 @@ export abstract class TransportMode {
 export class Trip {
     id: string = "";
     shapes: Array<ShapeRawData> = [];
+    stops: Array<Stop> = [];
 
     get shapeCoordinates(): Array<Position> {
         return this.shapes.map((shape) => [
