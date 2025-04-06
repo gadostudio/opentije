@@ -1,0 +1,149 @@
+.container {
+  background: white;
+  border: #00000040 1px solid;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  background-color: rgb(247 250 255 / 100%);
+
+  width: 360px;
+
+  @media (max-width: 481px) {
+    position: fixed;
+    width: 100%;
+  }
+
+  height: auto;
+
+  top: 256px;
+  bottom: 0;
+  transform: translateY(calc(100vh - 256px - 58px));
+  will-change: transform;
+  transition: transform 0.25s ease-in-out;
+
+  border-radius: 16px 16px 0 0;
+
+  @supports (backdrop-filter: blur(60px)) {
+    & {
+      backdrop-filter: blur(60px);
+      background-color: rgb(247 250 255 / 40%);
+    }
+  }
+
+  @media (min-width: 481px) {
+    border: none;
+    border-right: #00000040 1px solid;
+    width: 340px;
+    right: 16px;
+    left: auto;
+  }
+
+  @media (min-width: 800px) and (min-height: 600px) and (orientation: landscape) {
+    width: 360px;
+    height: 100vh;
+
+    left: 0;
+    top: 0;
+
+    border-radius: 0;
+    transform: translate(0);
+  }
+}
+
+.container-focused {
+  transform: translateY(0);
+}
+
+.header {
+  border-bottom: #00000040 1px solid;
+  box-sizing: border-box;
+  padding: 8px 0px 6px;
+}
+
+.routes {
+  padding: 0;
+  margin: 0px;
+  overflow-x: hidden;
+  input:not(:checked) {
+    transform: translate(24px);
+    opacity: 0;
+    transition:
+      transform 0.25s,
+      opacity 0.25s;
+  }
+
+  &:hover input {
+    opacity: 100;
+    transform: translate(0);
+  }
+}
+
+.searchInput {
+  padding: 12px;
+  margin: 0px 8px;
+  width: calc(100% - 16px);
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: #00000040 1px solid;
+  background: #ffffff40;
+
+  &:hover,
+  &:focus {
+    background: white;
+  }
+}
+
+.filters {
+  padding: 0 8px;
+}
+
+.categoryLabel {
+  min-height: 0px;
+}
+
+.categoryList {
+  padding-left: 0px;
+}
+
+.categorySubList {
+  padding-left: 24px;
+}
+
+.categoryItem {
+  list-style-type: none;
+}
+
+// Footer
+.footer {
+  border-top: #00000040 1px solid;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.footerAboutButton {
+  color: black;
+  border: none;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+  text-decoration: underline;
+  font-weight: bold;
+  display: inline;
+}
+
+.footerRight {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+
+  i {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    filter: grayscale(100%);
+  }
+}

@@ -1,7 +1,28 @@
-import { ShapeRawData } from "@/domain/gtfs";
-import { Coordinate } from "@/domain/location";
-import { ModeType } from "@/domain/transport-mode";
 import { Feature, MultiLineString, Point, Position } from "geojson";
+import { Coordinate } from "./location";
+import { jakartaCoordinate } from "@/data/constants";
+import { ShapeRawData } from "./gtfs";
+import { TransjakartaRouteType } from "@/data/transport-source-static/transjakarta";
+
+export enum ModeType {
+  Bus = "Bus",
+  Train = "Train",
+}
+
+// Categories for modes
+export const busCategories = {
+  Transjakarta: Object.values(TransjakartaRouteType),
+};
+export const trainCategories = [
+  "Commuterline",
+  "LRT Jakarta",
+  "MRT Jakarta",
+  "LRT Jabodebek",
+];
+export const transportCategories = {
+  [ModeType.Bus]: busCategories,
+  [ModeType.Train]: trainCategories,
+};
 
 export abstract class TransportMode {
   abstract name: string;
@@ -28,7 +49,6 @@ export abstract class TransportMode {
       route.mode = this;
 
       for (const stop of route.stops) {
-        if (stop.servedRoutes.includes(route)) continue;
         stop.servedRoutes.push(route);
       }
     }
@@ -83,7 +103,7 @@ export class Stop {
   id: string = "";
   name: string = "";
   type: StopType = StopType.BusStop;
-  coordinate: Coordinate = { latitude: 0, longitude: 0 };
+  coordinate: Coordinate = jakartaCoordinate;
   servedRoutes: Array<Route> = [];
 
   get geoJson(): Feature<Point> {
