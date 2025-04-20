@@ -4,7 +4,7 @@ import {
   TjRealtimeConnectionStatus as TransjakartaRealtimeConnectionStatus,
   useTransjakartaRealtimePositions,
 } from "@/hooks/transjakarta-realtime";
-import { createRoot, Root } from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import { useEffect, useMemo, useState } from "react";
 
 const MAP_CONNECTION_STATUS = {
@@ -35,6 +35,7 @@ export class Control implements IControl {
     | undefined = undefined;
 
   setConnStatus(connStatus: TransjakartaRealtimeConnectionStatus) {
+    this.connStatus = connStatus;
     this.connStatusSetter?.(connStatus);
   }
 
@@ -44,7 +45,7 @@ export class Control implements IControl {
     useEffect(() => {
       this.connStatusSetter = setConnStatus;
     }, [setConnStatus]);
-    
+
     const { display, color } = MAP_CONNECTION_STATUS[connStatus];
 
     return (
