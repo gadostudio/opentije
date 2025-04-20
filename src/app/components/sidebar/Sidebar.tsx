@@ -72,11 +72,17 @@ const Categories = ({ categories, path, checks, setChecks }: CategoryProps) => {
   const items = Array.isArray(categories)
     ? categories.map((item) => [item, null] as const)
     : Object.entries(categories);
-  
-  // Manage expanded state for all categories in an object
-  const [expandedStates, setExpandedStates] = useState<Record<string, boolean>>({});
 
-  const handleCheckboxChange = (_path: string, checked: boolean, childPaths: string[]) => {
+  // Manage expanded state for all categories in an object
+  const [expandedStates, setExpandedStates] = useState<Record<string, boolean>>(
+    {},
+  );
+
+  const handleCheckboxChange = (
+    _path: string,
+    checked: boolean,
+    childPaths: string[],
+  ) => {
     const newChecks = { ...checks };
 
     const pathsToUpdate = childPaths;
@@ -133,7 +139,9 @@ const Categories = ({ categories, path, checks, setChecks }: CategoryProps) => {
               <input
                 type="checkbox"
                 checked={isChecked}
-                onChange={(e) => handleCheckboxChange(_path, e.target.checked, childPaths)}
+                onChange={(e) =>
+                  handleCheckboxChange(_path, e.target.checked, childPaths)
+                }
               />
               {key}
             </label>

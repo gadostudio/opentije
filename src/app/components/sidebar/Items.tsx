@@ -23,9 +23,9 @@ export const RouteItem = ({ route }: RouteProps) => {
       <label
         className={styles.container}
         onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          setSelectedRouteId(route.id);
+          // e.stopPropagation();
+          // e.preventDefault();
+          // setSelectedRouteId(route.id);
         }}
       >
         <span

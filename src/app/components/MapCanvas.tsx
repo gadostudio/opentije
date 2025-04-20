@@ -1,5 +1,6 @@
 "use client";
 
+import "maplibre-gl/dist/maplibre-gl.css";
 import {
   CanvasSourceSpecification,
   ExpressionInputType,
@@ -15,8 +16,11 @@ import { useTransportController } from "@/data/transport-controller";
 import { useMapUiState } from "@/data/map-ui";
 import { ModeType } from "@/domain/transport-mode";
 import { jakartaCoordinate } from "@/data/constants";
-import { TjRealtimeConnectionControl as TransjakartaRealtimeConnectionControl } from "./map/connection-control";
-import { useEffect } from "react";
+import {
+  TjRealtimeConnectionControl as TransjakartaRealtimeConnectionControl,
+  useTransjakartaRealtimeConnectionControl,
+} from "./map/connection-control";
+import { useEffect, useMemo } from "react";
 import { useTransjakartaRealtimePositions } from "@/hooks/transjakarta-realtime";
 
 export enum MapLayer {
@@ -37,7 +41,6 @@ export const MapCanvas = () => {
     selectedRouteIds,
     setSelectedStop,
   } = useMapUiState();
-  const { connStatus } = useTransjakartaRealtimePositions(libreMap);
 
   useEffect(() => {
     const map = libreMap;
@@ -173,6 +176,8 @@ export const MapCanvas = () => {
     }
   }, [libreMap, modes, selectedRouteIds]);
 
+  useTransjakartaRealtimeConnectionControl(libreMap);
+
   useEffect(() => {
     const map = new Map({
       container: "map",
@@ -181,19 +186,19 @@ export const MapCanvas = () => {
       zoom: 12,
       attributionControl: false,
     });
-    map.on("load", async () => {
-      map.addControl(new TransjakartaRealtimeConnectionControl(connStatus));
-      map.addControl(
-        new GeolocateControl({
-          positionOptions: {
-            enableHighAccuracy: true,
-          },
-          trackUserLocation: true,
-          showAccuracyCircle: false,
-        }),
-      );
-      map.addControl(new NavigationControl());
+    map.addControl(new NavigationControl(), "bottom-right");
+    map.addControl(
+      new GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        trackUserLocation: true,
+        showAccuracyCircle: false,
+      }),
+      "bottom-right",
+    );
 
+    map.on("load", async () => {
       const busStopImg = await map.loadImage("/assets/images/bus-stop.webp");
       map.addImage("bus-stop", busStopImg.data);
       const trainStationImg = await map.loadImage(
@@ -207,7 +212,7 @@ export const MapCanvas = () => {
 
       setLibreMap(map);
     });
-  }, [connStatus, setLibreMap]);
+  }, [setLibreMap]);
 
   return (
     <div

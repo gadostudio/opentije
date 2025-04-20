@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Open Tije 🚌🚃🚗
 
-## Getting Started
+[Website](https://opentije.pages.dev/)
 
-First, run the development server:
+Open Tije stands for _Open Transportasi Jabodetabek_.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Discover bus stops, transit hubs, and train stations across the Jabodetabek metropolitan area through interactive maps. The goal is to liberate public transportation data and simplify access for everyone by consolidating information from various transport providers—currently scattered across separate apps—into one platform.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [x] Transjakarta
+  - [x] Visualization of bus stops
+  - [x] Visualization of bus routes
+  - [x] Real-time bus tracking
+- [ ] MRTJ
+  - [x] Stations
+- [ ] LRTJ
+  - [x] Stations
+- [ ] LRT Jabodebek
+  - [x] Stations
+- [ ] Commuterline
+  - [ ] Stations
+- [ ] Transpatriot
+  - [ ] Bus stops
+- [ ] Trans Wibawa Mukti
+  - [ ] Bus stops
+- [ ] Transpakuan
+  - [ ] Bus stops
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 💭 Feedback and Inquiries
 
-## Learn More
+Feel free to open an [issue](https://github.com/gadostudio/opentije/issues) or start a [discussion](https://github.com/gadostudio/opentije/discussions). For any inquiries, reach out to me at andra.antariksa\[at\]gmail.com.
 
-To learn more about Next.js, take a look at the following resources:
+## 📜 License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Licensed under [Attribution-NonCommercial 4.0](https://creativecommons.org/licenses/by-nc/4.0/deed.en). Data ©[Transjakarta](https://ppid.transjakarta.co.id/).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+In short, under this license:
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Attribution — You must give credit to this project.
+- NonCommercial — Commercial use of this software is strictly prohibited.
