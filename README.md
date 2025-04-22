@@ -9,23 +9,23 @@ Discover bus stops, transit hubs, and train stations across the Jabodetabek metr
 ## ✨ Features
 
 - [x] Transjakarta
-    - [x] Visualization of bus stops
-    - [x] Visualization of bus routes
-    - [x] Real-time bus tracking
+  - [x] Visualization of bus stops
+  - [x] Visualization of bus routes
+  - [x] Real-time bus tracking
 - [ ] MRTJ
-    - [x] Stations
+  - [x] Stations
 - [ ] LRTJ
-    - [x] Stations
+  - [x] Stations
 - [ ] LRT Jabodebek
-    - [x] Stations
+  - [x] Stations
 - [ ] Commuterline
-    - [ ] Stations
+  - [ ] Stations
 - [ ] Transpatriot
-    - [ ] Bus stops
+  - [ ] Bus stops
 - [ ] Trans Wibawa Mukti
-    - [ ] Bus stops
+  - [ ] Bus stops
 - [ ] Transpakuan
-    - [ ] Bus stops
+  - [ ] Bus stops
 
 ## 💭 Feedback and Inquiries
 

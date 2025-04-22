@@ -1,6 +1,6 @@
-import { ModeType, Route, Stop, TransportMode } from ".";
+import { ModeType, TransportMode } from "@/domain/transport-mode";
 
 export class LrtjMode extends TransportMode {
-    name: string = "LRT Jakarta";
-    type: ModeType = ModeType.Train;
+  name: string = "LRT Jakarta";
+  type: ModeType = ModeType.Train;
 }
