@@ -13,12 +13,12 @@ export enum ModeType {
 export const busCategories = () => ({
   Transjakarta: Object.values(TransjakartaRouteType),
 });
-export const trainCategories = () => ([
+export const trainCategories = () => [
   "Commuterline",
   "LRT Jakarta",
   "MRT Jakarta",
   "LRT Jabodebek",
-]);
+];
 export const transportCategories = () => ({
   [ModeType.Bus]: busCategories(),
   [ModeType.Train]: trainCategories(),

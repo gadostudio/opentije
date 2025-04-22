@@ -1,1 +1,8 @@
-function isNodejs() { return typeof "process" !== "undefined" && process && process.versions && process.versions.node; }
+function isNodejs() {
+  return (
+    typeof "process" !== "undefined" &&
+    process &&
+    process.versions &&
+    process.versions.node
+  );
+}

@@ -13,7 +13,9 @@ import { TransportModeLoader } from ".";
 import { TransjakartaMode } from "../transport-mode/transjakarta";
 import { Readable } from "stream";
 
-export const loadTransjakartaTransportMode = async (zipReader?: ZipReader<any>) => {
+export const loadTransjakartaTransportMode = async (
+  zipReader?: ZipReader<any>,
+) => {
   if (!zipReader) {
     const response = await fetch("/assets/transport-data/file_gtfs.zip");
     const blob = await response.blob();

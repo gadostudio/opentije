@@ -17,24 +17,25 @@ import { MapDataSource, MapLayer } from "../MapCanvas";
 import { BusPosition } from "@/data/transport-source-realtime/transjakarta";
 import { useMapUiState } from "@/data/map-ui";
 
-const mapConnectionStatus = (status: TransjakartaRealtimeConnectionStatus) => ({
-  [TransjakartaRealtimeConnectionStatus.Connected]: {
-    display: "Connected",
-    color: "#B1C29E",
-  },
-  [TransjakartaRealtimeConnectionStatus.Connecting]: {
-    display: "Connecting",
-    color: "#FADA7A",
-  },
-  [TransjakartaRealtimeConnectionStatus.Disconnected]: {
-    display: "Disconnected",
-    color: "#E16A54",
-  },
-  [TransjakartaRealtimeConnectionStatus.Error]: {
-    display: "Error",
-    color: "#E16A54",
-  },
-}[status]);
+const mapConnectionStatus = (status: TransjakartaRealtimeConnectionStatus) =>
+  ({
+    [TransjakartaRealtimeConnectionStatus.Connected]: {
+      display: "Connected",
+      color: "#B1C29E",
+    },
+    [TransjakartaRealtimeConnectionStatus.Connecting]: {
+      display: "Connecting",
+      color: "#FADA7A",
+    },
+    [TransjakartaRealtimeConnectionStatus.Disconnected]: {
+      display: "Disconnected",
+      color: "#E16A54",
+    },
+    [TransjakartaRealtimeConnectionStatus.Error]: {
+      display: "Error",
+      color: "#E16A54",
+    },
+  })[status];
 
 export class Control implements IControl {
   private container: HTMLElement | undefined;
@@ -60,9 +61,9 @@ export class Control implements IControl {
       useEffect(() => {
         this.connStatusSetter = setConnStatus;
       }, [setConnStatus]);
-  
+
       const { display, color } = mapConnectionStatus(connStatus);
-  
+
       return (
         <div className={style.container}>
           <span

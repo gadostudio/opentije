@@ -28,46 +28,47 @@ export type TjRealtimePositionsAction = {
   connStatus: TjRealtimeConnectionStatus;
 };
 
-export const useTransjakartaRealtimePositions = (): TjRealtimePositionsAction => {
-  const [busPositions, setBusPositions] = useState<Array<BusPosition>>([]);
-  const [connStatus, setConnStatus] = useState<TjRealtimeConnectionStatus>(
-    TjRealtimeConnectionStatus.Connecting,
-  );
-  const realtimeConn = useMemo(() => new RealtimeBusLocationSocket(), []);
+export const useTransjakartaRealtimePositions =
+  (): TjRealtimePositionsAction => {
+    const [busPositions, setBusPositions] = useState<Array<BusPosition>>([]);
+    const [connStatus, setConnStatus] = useState<TjRealtimeConnectionStatus>(
+      TjRealtimeConnectionStatus.Connecting,
+    );
+    const realtimeConn = useMemo(() => new RealtimeBusLocationSocket(), []);
 
-  useEffect(() => {
-    const connect = async () => {
-      try {
-        setConnStatus(TjRealtimeConnectionStatus.Connecting);
-        await realtimeConn.connect();
-        setConnStatus(TjRealtimeConnectionStatus.Connected);
-      } catch (error) {
-        setConnStatus(TjRealtimeConnectionStatus.Error);
-      }
-    };
-
-    connect();
-
-    return () => {
-      const disconnect = async () => {
+    useEffect(() => {
+      const connect = async () => {
         try {
-          await realtimeConn.disconnect();
-          setConnStatus(TjRealtimeConnectionStatus.Disconnected);
+          setConnStatus(TjRealtimeConnectionStatus.Connecting);
+          await realtimeConn.connect();
+          setConnStatus(TjRealtimeConnectionStatus.Connected);
         } catch (error) {
           setConnStatus(TjRealtimeConnectionStatus.Error);
         }
       };
-      disconnect();
-    };
-  }, [realtimeConn]);
 
-  useEffect(() => {
-    const handlePositionUpdate = (data: BusPositions) => {
-      setBusPositions(data.busData);
-    };
+      connect();
 
-    realtimeConn.onPositionUpdate(handlePositionUpdate);
-  }, [realtimeConn]);
+      return () => {
+        const disconnect = async () => {
+          try {
+            await realtimeConn.disconnect();
+            setConnStatus(TjRealtimeConnectionStatus.Disconnected);
+          } catch (error) {
+            setConnStatus(TjRealtimeConnectionStatus.Error);
+          }
+        };
+        disconnect();
+      };
+    }, [realtimeConn]);
 
-  return { busPositions, connStatus };
-};
+    useEffect(() => {
+      const handlePositionUpdate = (data: BusPositions) => {
+        setBusPositions(data.busData);
+      };
+
+      realtimeConn.onPositionUpdate(handlePositionUpdate);
+    }, [realtimeConn]);
+
+    return { busPositions, connStatus };
+  };

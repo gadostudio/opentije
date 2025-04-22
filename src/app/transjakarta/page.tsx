@@ -1,6 +1,3 @@
-
 export default function Transjakarta() {
-  return (
-    <h2> Hi</h2>
-  );
+  return <h2> Hi</h2>;
 }
