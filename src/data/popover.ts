@@ -1,4 +1,4 @@
-import { Stop } from "./transport-mode";
+import { Stop } from "@/domain/transport-mode";
 
 export type PopOverBusStop = {
   type: "stop";

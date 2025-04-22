@@ -17,7 +17,6 @@ import { useMapUiState } from "@/data/map-ui";
 import { ModeType } from "@/domain/transport-mode";
 import { jakartaCoordinate } from "@/data/constants";
 import {
-  TjRealtimeConnectionControl as TransjakartaRealtimeConnectionControl,
   useTransjakartaRealtimeConnectionControl,
 } from "./map/connection-control";
 import { useEffect, useMemo } from "react";

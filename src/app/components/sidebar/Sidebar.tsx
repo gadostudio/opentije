@@ -174,7 +174,7 @@ const Content = ({
   const { stops, routes } = useTransportController();
   const [showAboutModal, setShowAboutModal] = useState<boolean>(false);
   const [checks, setChecks] = useState<CategoriesToggle>(
-    createChecksFilter(transportCategories),
+    createChecksFilter(transportCategories()),
   );
 
   const filter = (route: RouteType): boolean => {
@@ -209,7 +209,7 @@ const Content = ({
         />
         <div className={styles.filters}>
           <Categories
-            categories={transportCategories}
+            categories={transportCategories()}
             checks={checks}
             setChecks={setChecks}
           />

@@ -1,6 +1,6 @@
 import { ShapeRawData } from "@/domain/gtfs";
 import { Coordinate } from "@/domain/location";
-import { ModeType } from "@/domain/transport-mode";
+import { ModeType, Route, Stop } from "@/domain/transport-mode";
 import { Feature, MultiLineString, Point, Position } from "geojson";
 
 export abstract class TransportMode {
@@ -44,62 +44,8 @@ export class Trip {
   }
 }
 
-export class Route {
-  mode!: TransportMode;
-  fullName: string = "";
-  color: string = "";
-  id: string = "";
-  shortName: string = "";
-  stops: Array<Stop> = [];
-  type: ModeType = ModeType.Bus;
-  trips: Array<Trip> = [];
-  // Hacks for filtering
-  label: string = "";
-
-  get geoJson(): Feature<MultiLineString> {
-    const routeShapes = this.trips.map((trip) => trip.shapeCoordinates);
-    return {
-      type: "Feature",
-      geometry: {
-        type: "MultiLineString",
-        coordinates: routeShapes,
-      },
-      properties: {
-        name: this.fullName,
-        color: `#${this.color}`,
-        routeId: this.id,
-      },
-    };
-  }
-}
-
 export enum StopType {
   BusStop,
   Halte,
   Station,
-}
-
-export class Stop {
-  id: string = "";
-  name: string = "";
-  type: StopType = StopType.BusStop;
-  coordinate: Coordinate = { latitude: 0, longitude: 0 };
-  servedRoutes: Array<Route> = [];
-
-  get geoJson(): Feature<Point> {
-    return {
-      type: "Feature",
-      properties: {
-        id: this.id,
-        name: this.name,
-        type: this.type,
-        color: "#000000",
-        servedRouteIds: this.servedRoutes.map((route) => route.id),
-      },
-      geometry: {
-        type: "Point",
-        coordinates: [this.coordinate.longitude, this.coordinate.latitude],
-      },
-    };
-  }
 }

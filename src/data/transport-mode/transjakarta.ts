@@ -12,7 +12,7 @@ export class TransjakartaMode extends TransportMode {
 
   clearDeadStops() {
     this.stops = this.stops.filter((stop) => {
-      return stop.servedRoutes.length > 0;
+      return stop.servedRoutes.length > 0 && stop.parentId.length !== 0;
     });
   }
 }

@@ -10,19 +10,19 @@ export enum ModeType {
 }
 
 // Categories for modes
-export const busCategories = {
+export const busCategories = () => ({
   Transjakarta: Object.values(TransjakartaRouteType),
-};
-export const trainCategories = [
+});
+export const trainCategories = () => ([
   "Commuterline",
   "LRT Jakarta",
   "MRT Jakarta",
   "LRT Jabodebek",
-];
-export const transportCategories = {
-  [ModeType.Bus]: busCategories,
-  [ModeType.Train]: trainCategories,
-};
+]);
+export const transportCategories = () => ({
+  [ModeType.Bus]: busCategories(),
+  [ModeType.Train]: trainCategories(),
+});
 
 export abstract class TransportMode {
   abstract name: string;
@@ -58,6 +58,7 @@ export abstract class TransportMode {
 export class Trip {
   id: string = "";
   shapes: Array<ShapeRawData> = [];
+  directionId: number = -1;
 
   get shapeCoordinates(): Array<Position> {
     return this.shapes.map((shape) => [shape.shape_pt_lon, shape.shape_pt_lat]);
@@ -101,6 +102,7 @@ export enum StopType {
 
 export class Stop {
   id: string = "";
+  parentId: string = "";
   name: string = "";
   type: StopType = StopType.BusStop;
   coordinate: Coordinate = jakartaCoordinate;

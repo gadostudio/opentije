@@ -16,6 +16,7 @@ export type StopRawData = {
   stop_lon: number;
   zone_id: any;
   location_type: any;
+  parent_station: string;
   wheelchair_boarding: any;
 };
 

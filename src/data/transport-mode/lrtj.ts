@@ -1,5 +1,4 @@
-import { ModeType } from "@/domain/transport-mode";
-import { Route, Stop, TransportMode } from ".";
+import { ModeType, TransportMode } from "@/domain/transport-mode";
 
 export class LrtjMode extends TransportMode {
   name: string = "LRT Jakarta";

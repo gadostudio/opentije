@@ -11,12 +11,16 @@ import { BlobReader, Entry, TextWriter, ZipReader } from "@zip.js/zip.js";
 import Papa from "papaparse";
 import { TransportModeLoader } from ".";
 import { TransjakartaMode } from "../transport-mode/transjakarta";
+import { Readable } from "stream";
 
-export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
-  const response = await fetch("/assets/transport-data/file_gtfs.zip");
-  const blob = await response.blob();
-  const reader = new BlobReader(blob);
-  const zipReader = new ZipReader(reader);
+export const loadTransjakartaTransportMode = async (zipReader?: ZipReader<any>) => {
+  if (!zipReader) {
+    const response = await fetch("/assets/transport-data/file_gtfs.zip");
+    const blob = await response.blob();
+    const reader = new BlobReader(blob);
+
+    zipReader = new ZipReader(reader);
+  }
 
   const fileEntries: Record<string, Entry> = {};
   const entries = await zipReader.getEntries();
@@ -98,6 +102,7 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
     .map((rawStop) => {
       const stop = new Stop();
       stop.id = rawStop.stop_id;
+      stop.parentId = rawStop.parent_station;
       stop.name = rawStop.stop_name;
       stop.type = StopType.BusStop;
       stop.coordinate = {
@@ -129,6 +134,7 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
     tripsRaw.get(tripRawData.route_id).push({
       tripId: tripRawData.trip_id,
       shapes: rawShapes.get(tripRawData.shape_id),
+      directionId: parseInt(tripRawData.direction_id, 10),
     });
     tripIdToRouteId[tripRawData.trip_id] = tripRawData.route_id;
   }
@@ -174,12 +180,13 @@ export const loadTransjakartaTransportMode: TransportModeLoader = async () => {
       const trip = new Trip();
       trip.id = tripRaw.tripId;
       trip.shapes = tripRaw.shapes;
+      trip.directionId = tripRaw.directionId;
       trips.push(trip);
 
       const stopIds = tripStopIds.get(trip.id);
       for (const stopId of stopIds) {
-        const stop = stops[stopId];
-        routeStops.push(stop);
+        const newStop = stops[stopId];
+        routeStops.push(newStop);
       }
     }
     route.stops = routeStops;
@@ -206,4 +213,5 @@ export enum TransjakartaRouteType {
 export type TripRaw = {
   tripId: string;
   shapes: Array<ShapeRawData>;
+  directionId: number;
 };
